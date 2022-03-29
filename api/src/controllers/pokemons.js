@@ -2,6 +2,8 @@ const axios = require("axios");
 
 const { Pokemon, Type } = require("../db");
 
+const {Op} = require('sequelize');
+
 const POKEMON_OBJECT = (res) => {
   return {
     id: res.data.id,
@@ -145,16 +147,23 @@ const postPokemon = async (req, res, next) => {
 if(!name){
   res.status(400).json({message: 'Name is required'})
 }
-let exist = await Pokemon.findAll({where: {name : req.body.name}})
-console.log(exist)
-console.log(req.body.name)
+
+let exist = await Pokemon.findOne({
+  where: {
+    name: {
+      [Op.iLike]: name,
+    }
+  }
+})
+console.log(exist, 'exist?')
+console.log('req', req.body.name.trim().charAt(0).toUpperCase() + name.trim().toLowerCase().slice(1))
 if (exist){
   return res.status(400).json({message: 'Pokemon already exist'})
 
 }
 
 let newPokemon = await Pokemon.create({
-  name: name.trim(),
+  name: name.trim().charAt(0).toUpperCase() + name.trim().slice(1),
   hp,
   attack,
   defense,
@@ -185,7 +194,7 @@ const editPokemon = async (req, res, next) => {
     const pokemon = await Pokemon.findByPk(id);
     if (pokemon) {
       await pokemon.update(info);
-      res.status(200).json({ message: "Pokemon created", pokemon });
+      res.status(200).json({ message: "Pokemon updated", pokemon });
     } else {
       res.status(404).json({ message: "Pokemon not found" });
     }
@@ -209,4 +218,4 @@ const deletePokemon = async (req, res, next) => {
     next(error);
   }
 };
-module.exports = { getAllPokemons, getById, postPokemon };
+module.exports = { getAllPokemons, getById, postPokemon, deletePokemon, editPokemon };
