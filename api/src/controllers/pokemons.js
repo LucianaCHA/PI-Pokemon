@@ -1,5 +1,4 @@
 const axios = require("axios");
-const { json } = require("body-parser");
 
 const { Pokemon, Type } = require("../db");
 
@@ -146,23 +145,37 @@ const postPokemon = async (req, res, next) => {
 if(!name){
   res.status(400).json({message: 'Name is required'})
 }
-    await Pokemon.create({
-      name: name,
-      hp: hp || Math.floor(Math.random() * 1000) + 1,
-      attack: attack || Math.floor(Math.random() * 1000) + 1,
-      defense: defense || Math.floor(Math.random() * 1000) + 1,
-      speed: attack || Math.floor(Math.random() * 1000) + 1,
-      height: height || ((Math.random() * 3) + 1).toFixed(1),
-      weight: weight || ((Math.random() * 150) + 1).toFixed(1),
-      image,
-      types,
-    });
+let exist = await Pokemon.findAll({where: {name : req.body.name}})
+console.log(exist)
+console.log(req.body.name)
+if (exist){
+  return res.status(400).json({message: 'Pokemon already exist'})
 
-   res.status(201).json({'Pokémon created': name})
-  }catch (error) {
-    next(error);
-  }
-};
+}
+
+let newPokemon = await Pokemon.create({
+  name: name.trim(),
+  hp,
+  attack,
+  defense,
+  speed,
+  height,
+  weight,
+  image, 
+  types
+  });
+if(types?.length){
+let typeDb = await Type.findAll({
+  where: { name: types },
+});
+
+newPokemon.addType(typeDb);
+}
+res.status(201).send('Pokemon created!');
+} catch (err) {
+next(err);
+}
+}
 
 const editPokemon = async (req, res, next) => {
   const { id } = req.params;
