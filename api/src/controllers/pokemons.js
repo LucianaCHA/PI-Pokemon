@@ -1,4 +1,7 @@
 const axios = require("axios");
+const { json } = require("body-parser");
+
+const { Pokemon, Type } = require("../db");
 
 const POKEMON_OBJECT = (res) => {
   return {
@@ -91,7 +94,7 @@ const getAllPokemons = async (req, res, next) => {
 
     allPokemons
       ? res.status(200).json(allPokemons)
-      : res.status(404).json({ Sorry: "No pokemons to show" });
+      : res.status(404).json({ message: "No pokémons to show" });
   } catch (error) {
     next(error);
   }
@@ -99,47 +102,98 @@ const getAllPokemons = async (req, res, next) => {
 const getById = async (req, res, next) => {
   const { id } = req.params;
 
-  try{
-
+  try {
     if (id && !isNaN(id)) {
-        const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
-        const selection = await axios(url);
-        console.log('ID', selection.data)
+      const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+      const selection = await axios(url);
+      console.log("ID", selection.data);
 
-        selection.data? res.status(200).json(POKEMON_OBJECT(selection)) : null; 
+      selection.data ? res.status(200).json(POKEMON_OBJECT(selection)) : null;
+    } else {
+      const search = await Pokemon.findByPk(id, { include: [Type] });
+      if (search) {
+        const selection = {
+          id: search.id,
+          name: search.name,
+          height: search.height,
+          weight: search.weight,
+          hp: search.hp,
+          defense: search.defense,
+          attack: search.attack,
+          speed: search.speed,
+          image: search.image,
+          types: search.types?.map((type) => type.name),
+          image: search.image,
+        };
+        res.status(200).json(selection);
       } else {
-        const search = await Pokemon.findByPk(id, { include: [Type] });
-        if (search) {
-          const selection = {
-            id: search.id,
-            name: search.name,
-            height: search.height,
-            weight: search.weight,
-            hp: search.hp,
-            defense: search.defense,
-            attack: search.attack,
-            speed: search.speed,
-            image: search.image,
-            types: search.types?.map((type) => type.name),
-            image: search.image,
-          };
-          res.status(200).json(selection);
-        } else {
-          res.status(404).json({ Sorry: "Invalid ID" });
-        }
+        res.status(404).json({ Sorry: "Invalid ID" });
       }
-
-  }
-  catch(error){
-      if(error.response){
-            res.status(error.response.status).json(error.response.data)
-        }
+    }
+  } catch (error) {
+    if (error.response) {
+      res.status(error.response.status).json(error.response.data);
+    }
     console.log(error);
-  } 
+  }
 };
 
+//magen, nombre y tipos, id , vida, fuerza, defensa, velocidad, h and peso
 const postPokemon = async (req, res, next) => {
-  const { name, id, power } = req.body;
-  await res.status(200).json({ name: name, id: id, power: power });
+  try {
+    const { name, hp, attack, defense, speed, height, weight, image, types } =
+      req.body;
+if(!name){
+  res.status(400).json({message: 'Name is required'})
+}
+    await Pokemon.create({
+      name: name,
+      hp: hp || Math.floor(Math.random() * 1000) + 1,
+      attack: attack || Math.floor(Math.random() * 1000) + 1,
+      defense: defense || Math.floor(Math.random() * 1000) + 1,
+      speed: attack || Math.floor(Math.random() * 1000) + 1,
+      height: height || ((Math.random() * 3) + 1).toFixed(1),
+      weight: weight || ((Math.random() * 150) + 1).toFixed(1),
+      image,
+      types,
+    });
+
+   res.status(201).json({'Pokémon created': name})
+  }catch (error) {
+    next(error);
+  }
+};
+
+const editPokemon = async (req, res, next) => {
+  const { id } = req.params;
+  const info = req.body;
+
+  try {
+    const pokemon = await Pokemon.findByPk(id);
+    if (pokemon) {
+      await pokemon.update(info);
+      res.status(200).json({ message: "Pokemon created", pokemon });
+    } else {
+      res.status(404).json({ message: "Pokemon not found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deletePokemon = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const toDelete = await Pokemon.findByPk(id);
+    if (toDelete) {
+      await toDelete.destroy();
+      res.status(200).json({ message: "Pokemon deleted" });
+    } else {
+      res.status(404).json({ message: "Pokemon not found" });
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 module.exports = { getAllPokemons, getById, postPokemon };

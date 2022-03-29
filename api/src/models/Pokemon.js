@@ -29,13 +29,15 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
     },
     height: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
+
     },
     weight: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
     },
     image: {
       type: DataTypes.STRING,
+      defaultValue : "https://images.alphacoders.com/206/thumbbig-206263.webp",
     },
     
   }, { timestamps: false });
