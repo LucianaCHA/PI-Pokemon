@@ -3,6 +3,7 @@ const axios = require("axios");
 const { Pokemon, Type } = require("../db");
 
 const {Op} = require('sequelize');
+const { json } = require("body-parser");
 
 const POKEMON_OBJECT = (res) => {
   return {
@@ -25,7 +26,7 @@ const getDataBD = async () => {
     const dbPokemons = await Pokemon.findAll({
       include: [
         {
-          model: PokemonType,
+          model: Type,
           atributes: ["name"],
           through: {
             atributes: ["id"],
@@ -86,7 +87,24 @@ const getApiData = async () => {
 };
 
 const getAllPokemons = async (req, res, next) => {
+
+  let results =[];
+  const {name, origin} = req.query;
   try {
+    if(name && name !== '')
+    {
+     results = await getByName(name);
+     console.log('results!!!', results)
+     results === undefined? res.status(404).json('Pokemon does not exists'): res.status(200).json(results);
+      
+      //aca va si recibo nam x query }
+    }
+    else if(origin && origin !== ''){      
+      results = await filterByOrigin(origin);
+     results? res.status(200).json(results) : res.status(304).redirect('/pokemons');
+    }
+    else{
+      console.log('si el origin no es de la fn o está vacio entro en getAll')
     const apiPokemons = await getApiData();
     const dbPokemons = await getDataBD();
     const allPokemons = [...apiPokemons, ...(dbPokemons ? dbPokemons : [])];
@@ -96,6 +114,7 @@ const getAllPokemons = async (req, res, next) => {
     allPokemons
       ? res.status(200).json(allPokemons)
       : res.status(404).json({ message: "No pokémons to show" });
+    }
   } catch (error) {
     next(error);
   }
@@ -139,7 +158,105 @@ const getById = async (req, res, next) => {
   }
 };
 
-//magen, nombre y tipos, id , vida, fuerza, defensa, velocidad, h and peso
+const getByName = async (name) => {
+  console.log("Entro a get By name y recibo name", name);
+  const url = "https://pokeapi.co/api/v2/pokemon/";
+   try{
+
+     const searchDB = await Pokemon.findOne(
+        {
+        where: {
+          name: {
+            [Op.like]: name.trim().toLowerCase(),
+          },
+        },
+        },
+       { include : [{ model : Type, atributes : ['name'] } ] }
+    );
+    // console.log('searchDB', searchDB.dataValues?.name)   
+    console.log('searchDB', searchDB)    
+    if( searchDB === null){
+    console.log('llego a buscar en la API ')
+    const searchAPI = await axios(url+name.trim().toLowerCase());
+    console.log('searchAPI', searchAPI)
+    
+    if(searchAPI.data ){      
+      return POKEMON_OBJECT(searchAPI)
+    }else{
+      return undefined
+    }
+  } else if (searchDB.dataValues?.name) {
+    return {
+      id: searchDB.dataValues.id,        
+      name: searchDB.dataValues.name,
+      height: searchDB.dataValues.height,
+      weight: searchDB.dataValues.weight,
+      hp: searchDB.dataValues.hp, 
+      defense: searchDB.dataValues.defense,
+      attack: searchDB.dataValues.attack,
+      speed: searchDB.dataValues.speed,
+      types: searchDB.dataValues.types?.map((type) => type.name),
+      image: searchDB.dataValues.image, 
+    };
+  }else{
+    return undefined
+  }
+
+
+  //   const searchAPI = await axios(url+name.trim().toLowerCase());
+  //   console.log('searchAPI', searchAPI)
+
+  //   if(searchAPI.data ){
+      
+  //     return POKEMON_OBJECT(searchAPI)
+  //   }else{
+  //     const searchDB = await Pokemon.findOne(
+  //       {
+  //       where: {
+  //         name: {
+  //           [Op.like]: name.trim().toLowerCase(),
+  //         },
+  //       },
+  //       },
+  //      { include : [{ model : Type, atributes : ['name'] } ] }
+  //   );
+  //   console.log('searchDB', searchDB.dataValues?.name)   
+  //   console.log('searchDB', searchDB.dataValues)    
+  //   if(searchDB.dataValues?.name){
+  //     return {
+  //       id: searchDB.dataValues.id,
+        
+  //       name: searchDB.dataValues.name,
+  //       height: searchDB.dataValues.height,
+  //       weight: searchDB.dataValues.weight,
+  //       hp: searchDB.dataValues.hp, 
+  //       defense: searchDB.dataValues.defense,
+  //       attack: searchDB.dataValues.attack,
+  //       speed: searchDB.dataValues.speed,
+  //       types: searchDB.dataValues.types?.map((type) => type.name),
+  //       image: searchDB.dataValues.image, 
+  //     };
+  //   }else {
+  //     return undefined;
+  //   }
+  // }
+// }
+  } catch(error){
+    console.log(error);
+  }
+} 
+
+const filterByOrigin = async (origin) =>{
+  console.log('entro al filter by oriigin ', origin);
+  if(origin === 'db'){
+    return await getDataBD();
+  }else if (origin === 'api'){
+    return await getApiData();   
+  }else{
+    return
+  }
+}
+
 const postPokemon = async (req, res, next) => {
   try {
     const { name, hp, attack, defense, speed, height, weight, image, types } =
@@ -155,21 +272,20 @@ let exist = await Pokemon.findOne({
     }
   }
 })
-console.log(exist, 'exist?')
-console.log('req', req.body.name.trim().charAt(0).toUpperCase() + name.trim().toLowerCase().slice(1))
+
 if (exist){
   return res.status(400).json({message: 'Pokemon already exist'})
 
 }
 
 let newPokemon = await Pokemon.create({
-  name: name.trim().charAt(0).toUpperCase() + name.trim().slice(1),
-  hp,
-  attack,
-  defense,
-  speed,
-  height,
-  weight,
+  name: name.trim().toLowerCase(),
+  hp : hp || Math.floor(Math.random() * 150) + 1,
+  attack : attack || Math.floor(Math.random() * 150) + 1,
+  defense: defense || Math.floor(Math.random() * 150) + 1,
+  speed : speed  || Math.floor(Math.random() * 150) + 1,
+  height : height || Math.floor(Math.random() * 3).toFixed(1),
+  weight : weight || Math.floor(Math.random() * 150).toFixed(1),
   image, 
   types
   });
