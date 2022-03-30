@@ -88,10 +88,12 @@ const getApiData = async () => {
 const getAllPokemons = async (req, res, next) => {
 
   let results =[];
+  let page;
+  page = req.query.page ? req.query.page : 1;
 
-  let page = req.query.page ? req.query.page : 1;
-  let totalPages;
-  totalPages = totalPages ? totalPages : 1;
+  const toShow = 12;
+  const start = (page - 1) * toShow;
+  const end = page * toShow + 1;
 
   const {name, origin} = req.query;
   try {
@@ -103,11 +105,10 @@ const getAllPokemons = async (req, res, next) => {
       
       //aca va si recibo nam x query }
     }
-    else if(origin && origin === 'db' || origin === 'api'){
+    else if(origin && origin.toLowerCase() === 'db' || origin.toLowerCase() === 'api'){
             
       results = await filterByOrigin(origin);
-
-      totalPages = results.length / 12;
+      let totalPages = Math.ceil(results.length / toShow)
     
       if(page > totalPages)
       {
@@ -116,23 +117,29 @@ const getAllPokemons = async (req, res, next) => {
       if (results.length === 0) {
         res.status(404).json('Not found');
       }
-      paginatedPokemons = results.slice(page - 1, page * 12);
+      let paginatedPokemons = results.slice(start, end);
       res.status(200).json(paginatedPokemons);
       }else{
-      console.log('si el origin no es de la fn o está vacio entro en getAll')
+   console.log('si el origin no es de la fn o está vacio entro en getAll')
     const apiPokemons = await getApiData();
     const dbPokemons = await getDataBD();
-    const allPokemons = [...apiPokemons, ...(dbPokemons ? dbPokemons : [])];
-    totalPages = allPokemons.length / 12;
-    
+    const results = [...apiPokemons, ...dbPokemons];
+    console.log('RSULTS EN GETALL', results.length)  
+    let totalPages = Math.ceil(results.length / toShow)
+       
+    let paginatedPokemons = results?.slice(start, end);
+    console.log('paginatedPokemons', paginatedPokemons)
     if(page > totalPages)
     {
+      console.log('page y totalpages ', page, totalPages)
+      console.log('hola en el if 1')
       res.status(404).json('Not found');
     }
-    if (allPokemons.length === 0) {
+    if (results.length === 0) {
+      console.log('hola en el if 2')
       res.status(404).json('Not found');
-    }
-    paginatedPokemons = allPokemons.slice(page - 1, page * 12);
+    }    
+    console.log('hola en el if 3')
     res.status(200).json(paginatedPokemons);
     }
   } catch (error) {
@@ -268,24 +275,13 @@ const getByName = async (name) => {
 
 const filterByOrigin = async (origin) =>{
   console.log('entro al filter by oriigin ', origin);
-  if(origin === 'db'){
+  if(origin.toLowerCase() === 'db'){
     return await getDataBD();
-  }else if (origin === 'api'){
+  }else if (origin.toLowerCase() === 'api'){
     return await getApiData();   
   }else{
     return
   }
-}
-
-const pagination = async({data, page}) => {
-  console.log('entro a pagination')
-  let pokemonsPerPage = 12;
-  page = page ? page : 1;
-  let totalPages = data.length/ toShow;
-  let start = (page - 1) * pokemonsPerPage;
-  let end = page * pokemonsPerPage;
-  return({data: data.slice(start, end),totalPages: totalPages});
-  
 }
 
 const postPokemon = async (req, res, next) => {
