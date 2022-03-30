@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.Hola{
+  border: 1p;
+  display: inline-block;
+  margin : auto;
+  
+}

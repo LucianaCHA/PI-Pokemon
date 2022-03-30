@@ -7,17 +7,19 @@ const { Op } = require("sequelize");
 const POKEMON_OBJECT = (res) => {
   return {
     id: res.data.id,
-    Name: res.data.name,
-    Height: res.data.height / 10 + "m",
-    Weight: res.data.weight / 10 + "kg",
-    HP: res.data.stats[0].base_stat,
-    Attack: res.data.stats[1].base_stat,
-    Defense: res.data.stats[2].base_stat,
-    Speed: res.data.stats[5].base_stat,
-    Types: res.data.types.map((type) => type.type.name),
+    name:
+      res.data.name.charAt(0).toUpperCase() +
+      res.data.name.slice(1).toLowerCase(),
+    height: res.data.height / 10 + "m",
+    weight: res.data.weight / 10 + "kg",
+    hp: res.data.stats[0].base_stat,
+    attack: res.data.stats[1].base_stat,
+    defense: res.data.stats[2].base_stat,
+    speed: res.data.stats[5].base_stat,
+    types: res.data.types.map((type) => type.type.name),
     back: res.data.sprites.back_default,
     front: res.data.sprites.front_default,
-    Art: res.data.sprites.other["official-artwork"].front_default,
+    art: res.data.sprites.other["official-artwork"].front_default,
   };
 };
 const getDataBD = async () => {
@@ -92,7 +94,7 @@ const getAllPokemons = async (req, res, next) => {
 
   const toShow = 12;
   const start = (page - 1) * toShow;
-  const end = page * toShow + 1;
+  const end = page * toShow;
 
   const { name, origin } = req.query;
   try {
@@ -105,8 +107,8 @@ const getAllPokemons = async (req, res, next) => {
 
       //aca va si recibo nam x query }
     } else if (
-      (origin && origin.toLowerCase() === "db") ||
-      origin.toLowerCase() === "api"
+      (origin && origin?.toLowerCase() === "db") ||
+      origin?.toLowerCase() === "api"
     ) {
       results = await filterByOrigin(origin);
       let totalPages = Math.ceil(results.length / toShow);
