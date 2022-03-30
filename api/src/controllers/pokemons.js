@@ -3,7 +3,6 @@ const axios = require("axios");
 const { Pokemon, Type } = require("../db");
 
 const {Op} = require('sequelize');
-const { json } = require("body-parser");
 
 const POKEMON_OBJECT = (res) => {
   return {
@@ -89,6 +88,11 @@ const getApiData = async () => {
 const getAllPokemons = async (req, res, next) => {
 
   let results =[];
+
+  let page = req.query.page ? req.query.page : 1;
+  let totalPages;
+  totalPages = totalPages ? totalPages : 1;
+
   const {name, origin} = req.query;
   try {
     if(name && name !== '')
@@ -99,21 +103,37 @@ const getAllPokemons = async (req, res, next) => {
       
       //aca va si recibo nam x query }
     }
-    else if(origin && origin !== ''){      
+    else if(origin && origin === 'db' || origin === 'api'){
+            
       results = await filterByOrigin(origin);
-     results? res.status(200).json(results) : res.status(304).redirect('/pokemons');
-    }
-    else{
+
+      totalPages = results.length / 12;
+    
+      if(page > totalPages)
+      {
+        res.status(404).json('Not found');
+      }
+      if (results.length === 0) {
+        res.status(404).json('Not found');
+      }
+      paginatedPokemons = results.slice(page - 1, page * 12);
+      res.status(200).json(paginatedPokemons);
+      }else{
       console.log('si el origin no es de la fn o está vacio entro en getAll')
     const apiPokemons = await getApiData();
     const dbPokemons = await getDataBD();
     const allPokemons = [...apiPokemons, ...(dbPokemons ? dbPokemons : [])];
-
-    console.log("apiPokemons", apiPokemons, "y db Pokemosn", dbPokemons);
-
-    allPokemons
-      ? res.status(200).json(allPokemons)
-      : res.status(404).json({ message: "No pokémons to show" });
+    totalPages = allPokemons.length / 12;
+    
+    if(page > totalPages)
+    {
+      res.status(404).json('Not found');
+    }
+    if (allPokemons.length === 0) {
+      res.status(404).json('Not found');
+    }
+    paginatedPokemons = allPokemons.slice(page - 1, page * 12);
+    res.status(200).json(paginatedPokemons);
     }
   } catch (error) {
     next(error);
@@ -255,6 +275,17 @@ const filterByOrigin = async (origin) =>{
   }else{
     return
   }
+}
+
+const pagination = async({data, page}) => {
+  console.log('entro a pagination')
+  let pokemonsPerPage = 12;
+  page = page ? page : 1;
+  let totalPages = data.length/ toShow;
+  let start = (page - 1) * pokemonsPerPage;
+  let end = page * pokemonsPerPage;
+  return({data: data.slice(start, end),totalPages: totalPages});
+  
 }
 
 const postPokemon = async (req, res, next) => {
