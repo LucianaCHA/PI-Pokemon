@@ -19,7 +19,7 @@ const POKEMON_OBJECT = (res) => {
     types: res.data.types.map((type) => type.type.name),
     back: res.data.sprites.back_default,
     front: res.data.sprites.front_default,
-    art: res.data.sprites.other["official-artwork"].front_default,
+    image: res.data.sprites.other["official-artwork"].front_default,
   };
 };
 const getDataBD = async () => {
@@ -141,7 +141,7 @@ const getAllPokemons = async (req, res, next) => {
         res.status(404).json("Not found");
       }
       console.log("hola en el if 3");
-      res.status(200).json(paginatedPokemons);
+      res.status(200).json({paginatedPokemons, results: results.length});
     }
   } catch (error) {
     next(error);
