@@ -1,11 +1,18 @@
 // reducer funciones puras
 
-import { GET_ALL_DATA, SET_PAGE, GET_BY_ID } from "../actions.js";
+import {
+  GET_ALL_DATA,
+  SET_PAGE,
+  GET_BY_ID,
+  GET_BY_NAME,
+  SET_NAME,
+} from "../actions/index.js";
 
 const initialState = {
   allPokemons: [],
-  page: 1,
   selectedPokemon: [],
+  page: 1,
+  name:''
 };
 
 export function reducer(state = initialState, action) {
@@ -14,7 +21,9 @@ export function reducer(state = initialState, action) {
       console.log("allPokemnons en el reducer", action.payload);
       return {
         ...state,
+     
         allPokemons: action.payload,
+        selectedPokemon: action.payload,
       };
 
     case SET_PAGE: {
@@ -25,12 +34,27 @@ export function reducer(state = initialState, action) {
       };
     }
 
+    case SET_NAME: {
+      console.log("SET_namE en el reducer", action.p);
+      return {
+        ...state,
+        name: action.payload,
+      };
+    }
+
     case GET_BY_ID:
       console.log("selectedbY ID  en el reducer", action.payload);
       return {
         ...state,
         selectedPokemon: action.payload,
       };
+
+    // case GET_BY_NAME:
+    //   console.log("selectedbY NAME en el reducer", action.payload);
+    //   return {
+    //     ...state,
+    //     selectedPokemon: action.payload
+    //   };
 
     default:
       return state;

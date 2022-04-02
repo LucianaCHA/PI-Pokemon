@@ -7,16 +7,14 @@ const { Op } = require("sequelize");
 const POKEMON_OBJECT = (res) => {
   return {
     id: res.data.id,
-    name:
-      res.data.name.charAt(0).toUpperCase() +
-      res.data.name.slice(1).toLowerCase(),
+    name: res.data.name.charAt(0).toUpperCase() + res.data.name.slice(1).toLowerCase(),
     height: res.data.height / 10 + "m",
     weight: res.data.weight / 10 + "kg",
     hp: res.data.stats[0].base_stat,
     attack: res.data.stats[1].base_stat,
     defense: res.data.stats[2].base_stat,
     speed: res.data.stats[5].base_stat,
-    types: res.data.types.map((type) => type.type.name),
+    types: res.data.types.map((type) => type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1).toLowerCase()),
     back: res.data.sprites.back_default,
     front: res.data.sprites.front_default,
     image: res.data.sprites.other["official-artwork"].front_default,
@@ -103,7 +101,7 @@ const getAllPokemons = async (req, res, next) => {
       console.log("results!!!", results);
       results === undefined
         ? res.status(404).json("Pokemon does not exists")
-        : res.status(200).json(results);
+        : res.status(200).json({paginatedPokemons: results});
 
       //aca va si recibo nam x query }
     } else if (
@@ -188,7 +186,7 @@ const getById = async (req, res, next) => {
 
 const getByName = async (name) => {
   console.log("Entro a get By name y recibo name", name);
-  const url = "https://pokeapi.co/api/v2/pokemon/";
+  const url = 'https://pokeapi.co/api/v2/pokemon/';
   try {
     const searchDB = await Pokemon.findOne(
       {
@@ -208,7 +206,9 @@ const getByName = async (name) => {
       console.log("searchAPI", searchAPI);
 
       if (searchAPI.data) {
-        return POKEMON_OBJECT(searchAPI);
+        console.log("searchAPI.data", POKEMON_OBJECT(searchAPI));
+
+        return [POKEMON_OBJECT(searchAPI)];
       } else {
         return undefined;
       }
@@ -216,8 +216,8 @@ const getByName = async (name) => {
       return {
         id: searchDB.dataValues.id,
         name: searchDB.dataValues.name,
-        height: searchDB.dataValues.height,
-        weight: searchDB.dataValues.weight,
+        height: searchDB.dataValues.height + 'm',
+        weight: searchDB.dataValues.weight + 'kg',
         hp: searchDB.dataValues.hp,
         defense: searchDB.dataValues.defense,
         attack: searchDB.dataValues.attack,
