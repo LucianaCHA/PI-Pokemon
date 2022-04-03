@@ -110,6 +110,7 @@ const getAllPokemons = async (req, res, next) => {
     ) {
       results = await filterByOrigin(origin);
       let totalPages = Math.ceil(results.length / toShow);
+      let paginatedPokemons = results?.slice(start, end);
 
       if (page > totalPages) {
         res.status(404).json("Not found");
@@ -117,8 +118,9 @@ const getAllPokemons = async (req, res, next) => {
       if (results.length === 0) {
         res.status(404).json("Not found");
       }
-      let paginatedPokemons = results.slice(start, end);
-      res.status(200).json(paginatedPokemons);
+      //let paginatedPokemons = results?.slice(start, end);
+      console.log('RESPUESTA FILTRE PAGINATED', paginatedPokemons)
+      res.status(200).json({paginatedPokemons, results: results.length});
     } else {
       console.log("si el origin no es de la fn o está vacio entro en getAll");
       const apiPokemons = await getApiData();
@@ -312,7 +314,7 @@ const postPokemon = async (req, res, next) => {
       height: height || Math.floor(Math.random() * 3).toFixed(1),
       weight: weight || Math.floor(Math.random() * 150).toFixed(1),
       image,
-      types,
+      types : types || 'unknown',
     });
     if (types?.length) {
       let typeDb = await Type.findAll({

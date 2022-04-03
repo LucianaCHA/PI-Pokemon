@@ -21,6 +21,7 @@ module.exports = (sequelize) => {
     },
     attack: {
       type: DataTypes.INTEGER,
+      
     },
     defense: {
       type: DataTypes.INTEGER,

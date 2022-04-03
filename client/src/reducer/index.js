@@ -4,15 +4,16 @@ import {
   GET_ALL_DATA,
   SET_PAGE,
   GET_BY_ID,
-  GET_BY_NAME,
   SET_NAME,
+  SET_ORIGIN
 } from "../actions/index.js";
 
 const initialState = {
   allPokemons: [],
   selectedPokemon: [],
   page: 1,
-  name:''
+  name:'',
+  origin:''
 };
 
 export function reducer(state = initialState, action) {
@@ -21,9 +22,7 @@ export function reducer(state = initialState, action) {
       console.log("allPokemnons en el reducer", action.payload);
       return {
         ...state,
-     
         allPokemons: action.payload,
-        selectedPokemon: action.payload,
       };
 
     case SET_PAGE: {
@@ -48,6 +47,12 @@ export function reducer(state = initialState, action) {
         ...state,
         selectedPokemon: action.payload,
       };
+    
+      case SET_ORIGIN:
+        return {
+          ...state,
+          origin: action.payload,
+        }
 
     // case GET_BY_NAME:
     //   console.log("selectedbY NAME en el reducer", action.payload);

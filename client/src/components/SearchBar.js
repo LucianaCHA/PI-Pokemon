@@ -1,30 +1,41 @@
 import React from "react";
+import {useSelector} from 'react-redux'
+
+import {useHistory, generatePath} from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { getAllData, getByName, setPage, setName } from "../actions";
+
+import { setName } from "../actions";
 
 const SearchBar = () => {
 const [search, setSearch] = React.useState('');
 
 const dispatch = useDispatch();
+const toRoute = useHistory();
+
+const allPokemons = useSelector((state) => state.allPokemons);
 
 const handleChange = (e) => {
     setSearch(e.target.value);
 }
 
-    const handleSubmit = (e) => {
+const handleSubmit = (e) => {
       e.preventDefault()
       dispatch(setName(search));
       //dispatch(setPage(1));
-      
-      
-      setSearch('');
+       setSearch('');
      // setName('');
-     
+  
       // dispatch(setPage(1));
       // dispatch(getAllData({name: search, page: 1}));
      
-      };     
+      };    
+  
+      // const handleOnClick = () => {
+      //   let id = allPokemons[0].id;
+      //   toRoute.push(generatePath("/home/:id", { id }));
+      //   console.log('HISTORY', toRoute);
+      // }
       
     
   return (

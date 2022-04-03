@@ -1,12 +1,13 @@
 export const GET_ALL_DATA = "GET_ALL_DATA";
 export const SET_PAGE = "SET_PAGE";
 export const GET_BY_ID = "GET_BY_ID";
-//export const GET_BY_NAME = "GET_BY_NAME";
 export const SET_NAME = "SET_NAME";
+export const SET_ORIGIN = "SET_ORIGIN";
 
-export const getAllData = (page, name) => {
+
+export const getAllData = (page, name, origin) => {
   return async function (dispatch) {
-    return await fetch(`http://localhost:3001/pokemons?page=${page || 1}&&name=${name || ''}`)
+    return await fetch(`http://localhost:3001/pokemons?page=${page || 1}&&name=${name || ''}&&origin=${origin || ''}`)
       .then((res) => res.json())
       .then((allPokemons) => {
         console.log("promesa en action ", allPokemons.paginatedPokemons);
@@ -56,6 +57,14 @@ export const getById = (id) => {
 //       });
 //   };
 // };
+
+export const setOrigin = (origin) => {
+  console.log("el origin que paso a searchbar dispatched in action", origin);
+  return {
+    type: SET_ORIGIN,
+    payload: origin
+  };
+};
 
 export const setName = (name) => {
   console.log("el name que paso a searchbar dispatched in action", name);
