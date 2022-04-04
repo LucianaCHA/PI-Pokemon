@@ -1,23 +1,31 @@
-import React from "react"
-import { NavLink } from "react-router-dom"
-import SearchBar from "./SearchBar"
-//import {Filters} from "./Filters"
+import React from "react";
+
+import { NavLink } from "react-router-dom";
+
+import { useDispatch, useSelector} from "react-redux";
+
+import { setOrigin, setPage, setName, getAllData } from "../actions";
+
 export const NavBar = () => {
 
-    
-    return (
-        <nav>
+    const dispatch = useDispatch();
+  const handleClickReset = (e) => {
+    dispatch(setOrigin(''));
+    dispatch(setPage(1));
+    dispatch(setName(''));
 
-            <NavLink to="/home">
-                Home
-            </NavLink>           
+  };
 
-            {/* //<Filters /> */}
-            <NavLink to="/home/create">
-                Create videogame
-            </NavLink>
+  return (
+    <nav>
+      <NavLink to="/home">
+        <button
+          onClick={handleClickReset}
+          >HOME</button>
+        
+      </NavLink>
 
-        </nav>
-    )
-}
-
+      <NavLink to="/home/createPokemon">Create Pokemong</NavLink>
+    </nav>
+  );
+};

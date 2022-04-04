@@ -3,7 +3,10 @@ export const SET_PAGE = "SET_PAGE";
 export const GET_BY_ID = "GET_BY_ID";
 export const SET_NAME = "SET_NAME";
 export const SET_ORIGIN = "SET_ORIGIN";
-
+export const SORT_BY = "SORT_BY";
+export const GET_POKE_TYPES = "GET_POKE_TYPES";
+export const FILTER_BY_TYPE = "FILTER_BY_TYPE";
+export const POST_POKEMON = 'POST_POKEMON';
 
 export const getAllData = (page, name, origin) => {
   return async function (dispatch) {
@@ -16,6 +19,22 @@ export const getAllData = (page, name, origin) => {
                 type: GET_ALL_DATA,
                 payload: allPokemons
               }))
+
+      }  )     
+      .catch((error) => console.log(error));
+  };
+}
+
+export const getPokeTypes = () => {
+  return async function (dispatch) {
+    return await fetch(`http://localhost:3001/types`)
+      .then((res) => res.json())
+      .then((pokeTypes) => {
+        console.log("promesa en action ", pokeTypes);
+        return(dispatch({
+          type: GET_POKE_TYPES,
+          payload: pokeTypes
+        }))
 
       }  )     
       .catch((error) => console.log(error));
@@ -58,13 +77,7 @@ export const getById = (id) => {
 //   };
 // };
 
-export const setOrigin = (origin) => {
-  console.log("el origin que paso a searchbar dispatched in action", origin);
-  return {
-    type: SET_ORIGIN,
-    payload: origin
-  };
-};
+
 
 export const setName = (name) => {
   console.log("el name que paso a searchbar dispatched in action", name);
@@ -73,3 +86,52 @@ export const setName = (name) => {
     payload: name
   };
 };
+
+export const setOrigin = (origin) => {
+  console.log("el origin que paso a searchbar dispatched in action", origin);
+  return {
+    type: SET_ORIGIN,
+    payload: origin
+  };
+};
+
+export const sortBy = (sortBy) => {
+  console.log("el sortBy dispatched in action", sortBy);
+  return {
+    type: SORT_BY,
+    payload: sortBy
+  }
+}
+
+export const filterByType = (type) => {
+  return{
+    type: FILTER_BY_TYPE,
+    payload: type
+  }
+
+}
+
+export const postPokemon = (pokemon) => {
+  return async function (dispatch) {
+    return await fetch(`http://localhost:3001/pokemons`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pokemon),
+    })
+      .then((res) => res.json())
+      .then((newPokemon) => {
+        console.log("new pokemon en action ", newPokemon);
+        return dispatch({
+          type: POST_POKEMON,
+          payload: newPokemon,
+        });
+      });
+  };
+}
+// export const clearState = () => {
+//   return {
+//     type: "CLEAR_STATE",
+//   };
+// }
