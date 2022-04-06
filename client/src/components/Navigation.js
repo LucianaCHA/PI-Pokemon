@@ -13,7 +13,6 @@ export const NavBar = () => {
     dispatch(setOrigin(''));
     dispatch(setPage(1));
     dispatch(setName(''));
-
   };
 
   return (

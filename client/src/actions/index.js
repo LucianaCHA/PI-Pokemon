@@ -7,6 +7,8 @@ export const SORT_BY = "SORT_BY";
 export const GET_POKE_TYPES = "GET_POKE_TYPES";
 export const FILTER_BY_TYPE = "FILTER_BY_TYPE";
 export const POST_POKEMON = 'POST_POKEMON';
+export const DATA_CONSOLIDATED = "DATA_CONSOLIDATED";
+export const FILTER_ORIGIN = "FILTER_ORIGIN";
 
 export const getAllData = (page, name, origin) => {
   return async function (dispatch) {
@@ -23,6 +25,22 @@ export const getAllData = (page, name, origin) => {
       }  )     
       .catch((error) => console.log(error));
   };
+}
+
+export const allData =() => {
+  return async function ( dispatch) {
+    return await fetch('http://localhost:3001/pokemons/allPokemons')
+    .then((data) => data.json())
+    .then((dataConsolidated) => {
+      console.log('HOLA SOY TODA LA DATA', dataConsolidated)
+      return (dispatch({
+        type: DATA_CONSOLIDATED,
+        payload : dataConsolidated,// RESULTS IS ARRAY {}
+      }))
+
+    })
+
+  }
 }
 
 export const getPokeTypes = () => {
@@ -111,6 +129,13 @@ export const filterByType = (type) => {
 
 }
 
+export const filterOrigin = (origin) => {
+  return{
+    type : FILTER_ORIGIN,
+    payload: origin
+  }
+}
+
 export const postPokemon = (pokemon) => {
   return async function (dispatch) {
     return await fetch(`http://localhost:3001/pokemons`, {
@@ -132,6 +157,6 @@ export const postPokemon = (pokemon) => {
 }
 // export const clearState = () => {
 //   return {
-//     type: "CLEAR_STATE",
+//     type: CLEAR_STATE,
 //   };
 // }

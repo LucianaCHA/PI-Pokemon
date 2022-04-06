@@ -7,14 +7,20 @@ const { Op } = require("sequelize");
 const POKEMON_OBJECT = (res) => {
   return {
     id: res.data.id,
-    name: res.data.name.charAt(0).toUpperCase() + res.data.name.slice(1).toLowerCase(),
+    name:
+      res.data.name.charAt(0).toUpperCase() +
+      res.data.name.slice(1).toLowerCase(),
     height: res.data.height / 10 + "m",
     weight: res.data.weight / 10 + "kg",
     hp: res.data.stats[0].base_stat,
     attack: res.data.stats[1].base_stat,
     defense: res.data.stats[2].base_stat,
     speed: res.data.stats[5].base_stat,
-    types: res.data.types.map((type) => type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1).toLowerCase()),
+    types: res.data.types.map(
+      (type) =>
+        type.type.name.charAt(0).toUpperCase() +
+        type.type.name.slice(1).toLowerCase()
+    ),
     back: res.data.sprites.back_default,
     front: res.data.sprites.front_default,
     image: res.data.sprites.other["official-artwork"].front_default,
@@ -85,6 +91,18 @@ const getApiData = async () => {
   }
 };
 
+const getAll = async (req, res, next) => {
+  try {
+    const apiPokemons = await getApiData();
+    const dbPokemons = await getDataBD();
+    const results = [...apiPokemons, ...dbPokemons];
+
+    results? res.status(200).json({paginatedPokemons: results}) : res.status(404).json({Message : 'Bad Request no results to Show'})
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getAllPokemons = async (req, res, next) => {
   let results = [];
   let page;
@@ -101,7 +119,7 @@ const getAllPokemons = async (req, res, next) => {
       console.log("results!!!", results);
       results === undefined
         ? res.status(404).json("Pokemon does not exists")
-        : res.status(200).json({paginatedPokemons: results});
+        : res.status(200).json({ paginatedPokemons: results });
 
       //aca va si recibo nam x query }
     } else if (
@@ -119,8 +137,8 @@ const getAllPokemons = async (req, res, next) => {
         res.status(404).json("Not found");
       }
       //let paginatedPokemons = results?.slice(start, end);
-      console.log('RESPUESTA FILTRE PAGINATED', paginatedPokemons)
-      res.status(200).json({paginatedPokemons, results: results.length});
+      console.log("RESPUESTA FILTRE PAGINATED", paginatedPokemons);
+      res.status(200).json({ paginatedPokemons, results: results.length });
     } else {
       console.log("si el origin no es de la fn o está vacio entro en getAll");
       const apiPokemons = await getApiData();
@@ -141,7 +159,7 @@ const getAllPokemons = async (req, res, next) => {
         res.status(404).json("Not found");
       }
       console.log("hola en el if 3");
-      res.status(200).json({paginatedPokemons, results: results.length});
+      res.status(200).json({ paginatedPokemons, results: results.length });
     }
   } catch (error) {
     next(error);
@@ -188,7 +206,7 @@ const getById = async (req, res, next) => {
 
 const getByName = async (name) => {
   console.log("Entro a get By name y recibo name", name);
-  const url = 'https://pokeapi.co/api/v2/pokemon/';
+  const url = "https://pokeapi.co/api/v2/pokemon/";
   try {
     const searchDB = await Pokemon.findOne(
       {
@@ -218,8 +236,8 @@ const getByName = async (name) => {
       return {
         id: searchDB.dataValues.id,
         name: searchDB.dataValues.name,
-        height: searchDB.dataValues.height + 'm',
-        weight: searchDB.dataValues.weight + 'kg',
+        height: searchDB.dataValues.height + "m",
+        weight: searchDB.dataValues.weight + "kg",
         hp: searchDB.dataValues.hp,
         defense: searchDB.dataValues.defense,
         attack: searchDB.dataValues.attack,
@@ -314,7 +332,7 @@ const postPokemon = async (req, res, next) => {
       height: height || Math.floor(Math.random() * 3).toFixed(1),
       weight: weight || Math.floor(Math.random() * 150).toFixed(1),
       image,
-      types : types || 'unknown',
+      types: types || "unknown",
     });
     if (types?.length) {
       let typeDb = await Type.findAll({
@@ -367,4 +385,5 @@ module.exports = {
   postPokemon,
   deletePokemon,
   editPokemon,
+  getAll
 };

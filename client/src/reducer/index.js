@@ -5,11 +5,13 @@ import {
   SET_PAGE,
   GET_BY_ID,
   SET_NAME,
-  SET_ORIGIN, 
+  SET_ORIGIN,
   SORT_BY,
   GET_POKE_TYPES,
   FILTER_BY_TYPE,
   POST_POKEMON,
+  DATA_CONSOLIDATED,
+  FILTER_ORIGIN,
 } from "../actions/index.js";
 
 const initialState = {
@@ -17,9 +19,10 @@ const initialState = {
   selectedPokemon: [],
   newPokemon: {},
   page: 1,
-  name:'',
-  origin:'',
+  name: "",
+  origin: "",
   poketypes: [],
+  dataConsolidated: [],
 };
 
 export function reducer(state = initialState, action) {
@@ -29,7 +32,7 @@ export function reducer(state = initialState, action) {
       return {
         ...state,
         allPokemons: action.payload,
-        selectedPokemon: action.payload, 
+        selectedPokemon: action.payload,
       };
 
     case SET_PAGE: {
@@ -47,72 +50,113 @@ export function reducer(state = initialState, action) {
       };
     }
 
-    case GET_BY_ID:{
+    case GET_BY_ID: {
       console.log("selectedbY ID  en el reducer", action.payload);
       return {
         ...state,
         selectedPokemon: action.payload,
       };
     }
-      case SET_ORIGIN:{
-        return {
-          ...state,
-          origin: action.payload,
-        }
+
+    case SET_ORIGIN: {
+      return {
+        ...state,
+        origin: action.payload,
+      };
+    }
+    case SORT_BY: {
+      const data = state.dataConsolidated.paginatedPokemons;
+      console.log(data, "state de data totsal en reducer de redux");
+      let sortedPokemons;
+      if (action.payload === "az_up") {
+        sortedPokemons = data.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+      } else if (action.payload === "za_down") {
+        sortedPokemons = data.sort((a, b) => {
+          return b.name.localeCompare(a.name);
+        });
+      } else if (action.payload === "atk_down") {
+        sortedPokemons = data.sort((a, b) => {
+          return a.attack - b.attack;
+        });
+      } else if (action.payload === "atk_up") {
+        sortedPokemons = data.sort((a, b) => {
+          return b.attack - a.attack;
+        });
       }
-      case SORT_BY:{
-        
-        let sortedPokemons;
-        if(action.payload === 'az_up'){
-          sortedPokemons = state.allPokemons.paginatedPokemons.sort((a,b) => {return a.name.localeCompare(b.name)});
-          return
-          
-        }else if(action.payload === 'za_down'){
-          sortedPokemons = state.allPokemons.paginatedPokemons.sort((a,b) => {return b.name.localeCompare(a.name)});
-          
-        }else if(action.payload === 'atk_down'){
-          sortedPokemons = state.allPokemons.paginatedPokemons.sort((a,b) => {return a.attack - b.attack});
-          
-        }else if(action.payload === 'atk_up'){
-          sortedPokemons = state.allPokemons.paginatedPokemons.sort((a,b) => {return b.attack - a.attack});
-          
-        }
-        return {
-          ...state,
-          allPokemons: sortedPokemons,
-        }
-      }
-        
-        case GET_POKE_TYPES:{
-          console.log("poketypes en el reducer", action.payload);
-          return {
-            ...state,
-            poketypes: action.payload,
-          }
-        }
-        
-        case FILTER_BY_TYPE: {
-          const all = state.selectedPokemon.paginatedPokemons;
-          
-            const filtered = action.payload === 'allTypes' ? all
-            : all.filter(f => f.types?.includes(action.payload.charAt(0).toUpperCase() + action.payload.slice(1)));
-            console.log(filtered, 'FILTRADO ACAAAAAA');
-            console.log(state.allPokemons.paginatedPokemons, 'state.allPokemons.paginatedPokemons ACAAAAAA');
-            console.log(action.payload, 'action.payload');
+      return {
+        ...state,
+        allPokemons: sortedPokemons,
+      };
+    }
 
-            return {
-                ...state,
-                selectedPokemons: filtered,
-            }
-          }
+    case DATA_CONSOLIDATED: {
+      console.log("consolidated en reducer ");
+      return {
+        ...state,
+        dataConsolidated: action.payload,
+      };
+    }
 
-          case POST_POKEMON:
-            console.log("ADD_POKEMON en el reducer", action.payload);
-            return {
-              ...state,
-              
-          }
+    case GET_POKE_TYPES: {
+      console.log("poketypes en el reducer", action.payload);
+      return {
+        ...state,
+        poketypes: action.payload,
+      };
+    }
 
+    case FILTER_BY_TYPE: {
+      const all = state.selectedPokemon.paginatedPokemons;
+
+      const filtered =
+        action.payload === "allTypes"
+          ? all
+          : all.filter((pokemon) =>
+              pokemon.types?.includes(
+                action.payload.charAt(0).toUpperCase() + action.payload.slice(1)
+              )
+            );
+      console.log(filtered, "FILTRADO ACAAAAAA");
+      console.log(
+        state.allPokemons.paginatedPokemons,
+        "state.allPokemons.paginatedPokemons ACAAAAAA"
+      );
+      console.log(action.payload, "action.payload");
+
+      return {
+        ...state,
+        selectedPokemons: filtered,
+      };
+    }
+
+    case FILTER_ORIGIN: {
+      const all = state.selectedPokemon.paginatedPokemons;
+      const filtered =
+        action.payload === "all"
+          ? all
+          : action.payload === "db"
+          ? all.filter((pokemon) => console.log(!isNaN(pokemon.id)))
+          : all.filter((pokemon) => isNaN(pokemon.id));
+
+      return {
+        ...state,
+        selectedPokemons: filtered,
+      };
+    }
+
+    case POST_POKEMON:
+      console.log("ADD_POKEMON en el reducer", action.payload);
+      return {
+        ...state,
+      };
+
+    // case CLEAR_STATE :
+    //   return{
+    //     ...state,
+
+    //   }
 
     default:
       return state;

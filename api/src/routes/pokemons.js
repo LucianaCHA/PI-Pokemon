@@ -5,7 +5,7 @@ const {getAllPokemons, getById, postPokemon, deletePokemon, editPokemon, getAll}
 
 
 router.get('/', getAllPokemons);
-router.get('/allPokemons', getAll)
+router.get('/allPokemons', getAll)//patch to send all data to Front
 router.get('/:id', getById);
 router.post('/', postPokemon);
 router.delete('/:id', deletePokemon);
