@@ -97,7 +97,7 @@ const getAll = async (req, res, next) => {
     const dbPokemons = await getDataBD();
     const results = [...apiPokemons, ...dbPokemons];
 
-    results? res.status(200).json({paginatedPokemons: results}) : res.status(404).json({Message : 'Bad Request no results to Show'})
+    results? res.status(200).json( results) : res.status(404).json({Message : 'Bad Request no results to Show'})
   } catch (error) {
     next(error);
   }

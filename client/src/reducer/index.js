@@ -23,6 +23,7 @@ const initialState = {
   origin: "",
   poketypes: [],
   dataConsolidated: [],
+  backData: []
 };
 
 export function reducer(state = initialState, action) {
@@ -65,7 +66,7 @@ export function reducer(state = initialState, action) {
       };
     }
     case SORT_BY: {
-      const data = state.dataConsolidated.paginatedPokemons;
+      const data = state.dataConsolidated;
       console.log(data, "state de data totsal en reducer de redux");
       let sortedPokemons;
       if (action.payload === "az_up") {
@@ -95,6 +96,7 @@ export function reducer(state = initialState, action) {
       console.log("consolidated en reducer ");
       return {
         ...state,
+        backData: action.payload, 
         dataConsolidated: action.payload,
       };
     }
@@ -108,31 +110,46 @@ export function reducer(state = initialState, action) {
     }
 
     case FILTER_BY_TYPE: {
-      const all = state.selectedPokemon.paginatedPokemons;
+      const backUp = state.backData;
 
+      const all = backUp;
+
+      console.log('AL INGRESAR AL REDUCER ALL ES LO QUE TENGO PARA FILTRAR', all)
+      
+      console.log('AL INGRESAR AL REDUCER ALL ESE SUPONE IOGUAL A BACKUP ', backUp)
+
+      console.log('BACKUP DEBERIA SER IGUAL AL ESTADO DE RESGUARDO ', state.backData);
+
+      console.log('baxckup debria ser igual a consolidated', state.dataConsolidated);
+
+      
       const filtered =
-        action.payload === "allTypes"
+        action.payload === ""
           ? all
           : all.filter((pokemon) =>
               pokemon.types?.includes(
                 action.payload.charAt(0).toUpperCase() + action.payload.slice(1)
               )
             );
-      console.log(filtered, "FILTRADO ACAAAAAA");
-      console.log(
-        state.allPokemons.paginatedPokemons,
-        "state.allPokemons.paginatedPokemons ACAAAAAA"
-      );
-      console.log(action.payload, "action.payload");
+      console.log('POST FILTER ALL', all);
+
+      console.log('POST FILTER ALL deberia ser igual a filtered xq cambi+ó', filtered);
+
+      console.log('QUE TIENE BACUP STATE', state.backData);
+
+      console.log('consolidated deberia ser el filtrado ', state.dataConsolidated);
+
+
+
 
       return {
         ...state,
-        selectedPokemons: filtered,
+        dataConsolidated:filtered,
       };
     }
 
     case FILTER_ORIGIN: {
-      const all = state.selectedPokemon.paginatedPokemons;
+      const all = state.selectedPokemon;
       const filtered =
         action.payload === "all"
           ? all

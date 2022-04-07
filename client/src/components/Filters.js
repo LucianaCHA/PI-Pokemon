@@ -24,6 +24,7 @@ export const Filters = () => {
   const start = (page - 1) * 12;
   const end = page * 12;
 
+  //const allPokemons = useSelector((state) => state.allPokemons);
   const allPokemons = useSelector((state) => state.dataConsolidated);
   const poketypes = useSelector((state) => state.poketypes);
 
@@ -53,8 +54,10 @@ export const Filters = () => {
 
   const handleFilterType = (e) => {
     e.preventDefault();
+    
     setFilter(e.target.value);
     dispatch(filterByType(e.target.value));
+    setFilter('')
     //setPage(1);
   };
 
@@ -66,8 +69,9 @@ export const Filters = () => {
         allPokemons.length <= 0 ? (
        <img src={ash} alt="loading..." />
      ) : (
-        allPokemons?.paginatedPokemons?.slice(start, end).map((pokemon) => {
-         return  ( <NavLink to={`/pokemon/${pokemon.id}`} key = {pokemon.id}>
+        allPokemons?.slice(start, end).map((pokemon) => {
+          console.log(allPokemons, 'toRenderDelFront')
+         return  ( <NavLink to={`/pokemon/${pokemon.id}`} key = {pokemon.id+'filterView'}>
          <div className="Hola">
            <Pokemon
              name={pokemon.name}
@@ -88,19 +92,19 @@ export const Filters = () => {
         <button disabled={page - 1 === 0} onClick={(e) => switchPage(page - 1)}>
           ◀️
         </button>
-        {console.log("pages to show", allPokemons?.paginatedPokemons?.length / 12)}
+        {console.log("pages to show", allPokemons?.length / 12)}
         <Pagination
-          totalPages={Math.ceil(allPokemons?.paginatedPokemons?.length / 12)}
+          totalPages={Math.ceil(allPokemons?.length / 12)}
           switchPage={switchPage}
           page={page}
         />
         {page}/
-        {isNaN(allPokemons?.paginatedPokemons?.length / 12)
+        {isNaN(allPokemons?.length / 12)
           ? "(╯°□°)╯L◓ading"
-          : Math.ceil(allPokemons?.paginatedPokemons?.length / 12)}
+          : Math.ceil(allPokemons?.length / 12)}
         {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
         <button
-          disabled={page + 1 > Math.ceil(allPokemons?.paginatedPokemons?.length / 12)}
+          disabled={page + 1 > Math.ceil(allPokemons?.length / 12)}
           onClick={(e) => switchPage(page + 1)}
         >
           ▶️

@@ -3,9 +3,11 @@ import {useDispatch, useSelector} from 'react-redux'
 import { getPokeTypes, postPokemon  } from './actions/index.js'
 
 
-export const createPokemon() {
+export function CreatePokemon() {
+
     const dispatch = useDispatch()
     const poketypes = useSelector((state) => state.poketypes)
+
     const [form, setForm] = React.useState({name:'', hp:0, attack:0, defense:0, speed:0, weigth: 0, heigth: 0, image: '', types:[]})
 
 
@@ -49,4 +51,3 @@ export const createPokemon() {
     )
 }
 
-export default Form
