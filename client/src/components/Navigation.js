@@ -6,6 +6,9 @@ import { useDispatch, useSelector} from "react-redux";
 
 import { setOrigin, setPage, setName, getAllData } from "../actions";
 
+import { Pokemon } from "./Pokemon";
+import SearchBar from "./SearchBar";
+
 export const NavBar = () => {
 
     const dispatch = useDispatch();
@@ -23,6 +26,8 @@ export const NavBar = () => {
           >HOME</button>
         
       </NavLink>
+
+      <SearchBar />
 
       <NavLink to="/home/createPokemon">Create Pokemong</NavLink>
     </nav>

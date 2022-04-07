@@ -82,7 +82,7 @@ export function Home() {
   return (
     <>  
       <nav>
-        <SearchBar />
+        
         <button onClick={handleClick} value= 'api'>Check Api!</button>
         <button onClick={handleClick} value= 'db'>Check yours!</button>
         <button onClick={() => setData('front')}>Filters!</button>        

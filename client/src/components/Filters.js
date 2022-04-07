@@ -9,7 +9,7 @@ import { Pokemon } from "./Pokemon";
 import { Pagination } from "./Pagination";
 
 import ash from "./ash-now.gif";
-
+import SearchBar from './SearchBar'
 import { NavLink } from "react-router-dom";
 
 export const Filters = () => {
@@ -98,10 +98,10 @@ export const Filters = () => {
           switchPage={switchPage}
           page={page}
         />
-        {page}/
-        {isNaN(allPokemons?.length / 12)
+        
+        {isNaN(allPokemons?.length / 12) || allPokemons?.length === 0
           ? "(╯°□°)╯L◓ading"
-          : Math.ceil(allPokemons?.length / 12)}
+          : {page}/ (Math.ceil(allPokemons?.length / 12))|| ''}
         {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
         <button
           disabled={page + 1 > Math.ceil(allPokemons?.length / 12)}

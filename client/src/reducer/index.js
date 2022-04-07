@@ -23,7 +23,7 @@ const initialState = {
   origin: "",
   poketypes: [],
   dataConsolidated: [],
-  backData: []
+  backData: [],
 };
 
 export function reducer(state = initialState, action) {
@@ -96,7 +96,7 @@ export function reducer(state = initialState, action) {
       console.log("consolidated en reducer ");
       return {
         ...state,
-        backData: action.payload, 
+        backData: action.payload,
         dataConsolidated: action.payload,
       };
     }
@@ -114,15 +114,23 @@ export function reducer(state = initialState, action) {
 
       const all = backUp;
 
-      console.log('AL INGRESAR AL REDUCER ALL ES LO QUE TENGO PARA FILTRAR', all)
-      
-      console.log('AL INGRESAR AL REDUCER ALL ESE SUPONE IOGUAL A BACKUP ', backUp)
+      console.log(
+        "AL INGRESAR AL REDUCER ALL ES LO QUE TENGO PARA FILTRAR",
+        all
+      );
+      console.log(
+        "AL INGRESAR AL REDUCER ALL ESE SUPONE IOGUAL A BACKUP ",
+        backUp
+      );
+      console.log(
+        "BACKUP DEBERIA SER IGUAL AL ESTADO DE RESGUARDO ",
+        state.backData
+      );
+      console.log(
+        "baxckup debria ser igual a consolidated",
+        state.dataConsolidated
+      );
 
-      console.log('BACKUP DEBERIA SER IGUAL AL ESTADO DE RESGUARDO ', state.backData);
-
-      console.log('baxckup debria ser igual a consolidated', state.dataConsolidated);
-
-      
       const filtered =
         action.payload === ""
           ? all
@@ -131,43 +139,50 @@ export function reducer(state = initialState, action) {
                 action.payload.charAt(0).toUpperCase() + action.payload.slice(1)
               )
             );
-      console.log('POST FILTER ALL', all);
-
-      console.log('POST FILTER ALL deberia ser igual a filtered xq cambi+ó', filtered);
-
-      console.log('QUE TIENE BACUP STATE', state.backData);
-
-      console.log('consolidated deberia ser el filtrado ', state.dataConsolidated);
-
-
-
-
+      console.log("POST FILTER ALL", all);
+      console.log(
+        "POST FILTER ALL deberia ser igual a filtered xq cambi+ó",
+        filtered
+      );
+      console.log("QUE TIENE BACUP STATE", state.backData);
+      console.log(
+        "consolidated deberia ser el filtrado ",
+        state.dataConsolidated
+      );
       return {
         ...state,
-        dataConsolidated:filtered,
+        dataConsolidated: filtered,
       };
     }
 
     case FILTER_ORIGIN: {
-      const all = state.selectedPokemon;
-      const filtered =
-        action.payload === "all"
-          ? all
-          : action.payload === "db"
-          ? all.filter((pokemon) => console.log(!isNaN(pokemon.id)))
-          : all.filter((pokemon) => isNaN(pokemon.id));
+      const backUp = state.backData;
+
+      const apiDB = backUp;
+
+      console.log("AL INGRESAR AL REDUCER apiDB ES LO QUE TENGO PARA FILTRAR", apiDB);
+      console.log("AL INGRESAR AL REDUCER apiDB ESE SUPONE IOGUAL A BACKUP ",backUp);
+      console.log( "BACKUP DEBERIA SER IGUAL AL ESTADO DE RESGUARDO ",state.backData);
+      console.log('baxckup debria ser igual a consolidated', state.dataConsolidated);
+
+      const byOrigin = action.payload === 'api' ? apiDB.filter((pokemon) => !isNaN(pokemon.id)) : action.payload === 'db' ? apiDB.filter((pokemon) => isNaN(pokemon.id)) : apiDB ;
+
+      console.log("POST FILTER origin apiDB es =", apiDB);
+      console.log("POST FILTER ALL deberia ser igual a filtered xq cambi+ó", byOrigin);
+      console.log("QUE TIENE BACUP STATE", state.backData);
+      console.log("consolidated deberia ser el filtrado ", state.dataConsolidated);
 
       return {
         ...state,
-        selectedPokemons: filtered,
+        dataConsolidated: byOrigin,
       };
     }
+
 
     case POST_POKEMON:
       console.log("ADD_POKEMON en el reducer", action.payload);
       return {
-        ...state,
-      };
+        ...state,      };
 
     // case CLEAR_STATE :
     //   return{

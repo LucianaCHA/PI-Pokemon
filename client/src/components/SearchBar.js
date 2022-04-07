@@ -9,7 +9,6 @@ import { setName } from "../actions";
 
 const SearchBar = () => {
 const [search, setSearch] = React.useState('');
-
 const dispatch = useDispatch();
 const toRoute = useHistory();
 
