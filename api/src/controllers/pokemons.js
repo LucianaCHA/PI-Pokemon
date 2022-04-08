@@ -44,8 +44,8 @@ const getDataBD = async () => {
       return {
         id: pokemon.id,
         name: pokemon.name,
-        height: pokemon.height,
-        weight: pokemon.weight,
+        height: pokemon.height + 'm',
+        weight: pokemon.weight + 'kg',
         hp: pokemon.hp,
         defense: pokemon.defense,
         attack: pokemon.attack,
@@ -329,8 +329,8 @@ const postPokemon = async (req, res, next) => {
       attack: attack || Math.floor(Math.random() * 150) + 1,
       defense: defense || Math.floor(Math.random() * 150) + 1,
       speed: speed || Math.floor(Math.random() * 150) + 1,
-      height: height || Math.floor(Math.random() * 3).toFixed(1),
-      weight: weight || Math.floor(Math.random() * 150).toFixed(1),
+      height: height || Math.floor((Math.random() * 3)+0.01).toFixed(1),
+      weight: weight || Math.floor((Math.random() * 150)+0.1).toFixed(1),
       image,
       types: types || "unknown",
     });

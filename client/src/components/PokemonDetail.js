@@ -35,8 +35,12 @@ export function PokemonDetail(props) {
     
       return selectedPokemon? (
           <>
-{console.log('que trae selectedt', selectedPokemon)
-}          <button onClick={goToBack}> <h1>🔙</h1>⏪</button>
+{console.log('que trae selectedt', selectedPokemon)}
+{console.log('que trae selectedt IMAGE', selectedPokemon.image)}
+          
+          
+          
+          <button onClick={goToBack}> <h1>🔙</h1>⏪</button>
           <h1>{selectedPokemon.name}</h1>
           <img src = {selectedPokemon.image} alt = {selectedPokemon.name} border= '1px solid #ddd' radius='45px' padding= '4px' width='250em' height='250em'/>;
           <h2>Stats</h2>

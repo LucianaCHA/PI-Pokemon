@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 
+
 require("dotenv").config();
 
 // Exportamos una funcion que define el modelo
@@ -38,7 +39,7 @@ module.exports = (sequelize) => {
     },
     image: {
       type: DataTypes.STRING,
-      defaultValue : "https://images.alphacoders.com/206/thumbbig-206263.webp",
+      defaultValue : "https://picsum.photos/400/300",
     },
     
   }, { timestamps: false });

@@ -15,10 +15,65 @@ export function CreatePokemon() {
 
   const poketypes = useSelector((state) => state.poketypes);
 
-    useEffect(() => {
+  useEffect(() => {
     dispatch(getPokeTypes());
   }, [dispatch]);
 
+  function validate(pokemon) {
+    let error = {};
+
+    if (!pokemon.name) {
+      error.name = "Your pokemon needs a name!";
+    } 
+    if(!(/^[a-zA-z]*[a-zA-Z\d\-_@&$%#\s]{3,18}$/.test(pokemon.name))) {
+    error.name = 'Name must be at least 3 characters';
+    }//     console.log(error.message)
+    if(pokemon.hp !== '' && pokemon.hp < 1 ) {
+      error.hp = 'HP must be greater than 1 or leave it empty and toss a coin!';
+    }
+    if(pokemon.hp !== '' && pokemon.hp > 255 ) {
+      error.hp = 'HP must be less than 255 or leave it empty and toss a coin!';
+    }
+    if(pokemon.attack !== '' && pokemon.attack < 1 ) {
+      error.attack = 'Attack must be greater than 1 or leave it empty and toss a coin!';
+    }
+    if(pokemon.attack !== '' && pokemon.attack > 255 ) {
+      error.attack = 'Attack must be less than 255 or leave it empty and toss a coin!';
+    }
+    if(pokemon.defense !== '' && pokemon.defense < 1 ) {
+      error.defense = 'Defense must be greater than 1 or leave it empty and toss a coin!';
+    }
+    if(pokemon.defense !== '' && pokemon.defense > 255 ) {
+      error.defense = 'Defense must be less than 255 or leave it empty and toss a coin!';
+    }
+    if(pokemon.speed !== '' && pokemon.speed < 1 ) {
+      error.speed = 'HP must be greater than 1 or leave it empty and toss a coin!';
+    }
+    if(pokemon.speed !== '' && pokemon.speed > 255 ) {
+      error.speed = 'HP must be less than 255 or leave it empty and toss a coin!';
+    }
+    if(pokemon.weight !== '' && pokemon.weight < 0.01 ) {
+      error.weight = 'Weight must be greater than 0.01 kg or leave it empty and toss a coin!';
+    }
+    if(pokemon.weight !== '' && pokemon.weight > 1000 ) {
+      error.weight = 'Weight must be less than 999 kg or leave it empty and toss a coin!';
+    }
+    if(pokemon.height !== '' && pokemon.height < 0.1 ) {
+      error.height = 'Height must be greater than 10 cm or leave it empty and toss a coin!';
+    }
+    if(pokemon.height !== '' && pokemon.height > 20 ) {
+      error.height = 'Height must be less than 20 m or leave it empty and toss a coin!';
+    }
+    if(pokemon.image !== '' && !/https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(pokemon.image)) {
+      error.image = 'Image must be a valid URL';
+    }
+
+    if(pokemon.types.length >2) {
+      error.types = 'You can only select 2 types';
+    }
+    console.log(error, "objeto en validate functions");
+    return error;
+  }
 
   const [pokemon, setPokemon] = React.useState({
     name: "",
@@ -27,12 +82,12 @@ export function CreatePokemon() {
     attack: "",
     defense: "",
     speed: "",
-    image: "",
+    image : "",
     weight: "",
     height: "",
   });
 
-  const [error, setError] = React.useState({});
+  const [errors, setErrors] = React.useState({});
 
   const [isValid, setIsValid] = React.useState(false);
 
@@ -40,64 +95,61 @@ export function CreatePokemon() {
     goBack.goBack();
   };
 
-
-  // useEffect(() => {
-  //   setError(validate(pokemon));
-   
-  // }, [pokemon]);
+  useEffect(() => {
+     setErrors(validate(pokemon))
+      setIsValid(Object.keys(validate(pokemon)).length ===0);
+  }, [pokemon]);
 
   const handleChange = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     setPokemon({
+     
       ...pokemon,
       [e.target.name]: e.target.value,
     });
 
-    // setError(
-    //   validate({
-    //     ...pokemon,
-    //     [e.target.name]: e.target.value,
-    //   })
-    // );
-
-   
+    setErrors(
+      validate({
+        ...pokemon,
+        [e.target.name]: e.target.value,
+      })
+    );
+    setIsValid(Object.keys(errors).length === 0);
   };
 
   const handleSelect = (t) => {
     t.preventDefault();
-    if(!pokemon.types.includes(t.target.value)){
+    if (!pokemon.types.includes(t.target.value)) {
       setPokemon({
-        ...pokemon, 
-        types: [...pokemon.types, t.target.value]
-      })
-    }else{
+        ...pokemon,
+        types: [...pokemon.types, t.target.value],
+      });
+    } else {
       setPokemon({
-        ...pokemon, 
-        types: pokemon.types.filter(e => e !== t.target.value)
-      })
+        ...pokemon,
+        types: pokemon.types.filter((e) => e !== t.target.value),
+      });
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  //   setIsValid(Object.keys(error).length === 0);
-    
-    // if (isValid) {
-    //   dispatch(postPokemon(pokemon));
-    //   goBackToHome();
-    // }
-
-    dispatch(postPokemon(pokemon));
+    if (isValid) {
+      console.log(isValid, "en submit form");
+      if(pokemon.image === '') {
+        pokemon.image = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aGihiAJdXHQUE3L2c6O9IgHaHa%26pid%3DApi&f=1';
+      }
+      dispatch(postPokemon(pokemon));
+      alert("Pokemon created :) ");
       goBackToHome();
-      console.log(pokemon, 'objeto creado en componente')
-      alert('Pokemon created :) ')
+    }
   };
 
   return (
     <>
       <button onClick={goBackToHome}>
-         <h1>🔙</h1>⏪
+        <h1>🔙</h1>⏪
       </button>
 
       <div>
@@ -106,34 +158,34 @@ export function CreatePokemon() {
 
       <form onSubmit={handleSubmit}>
         <div>
-         <label>Name</label>
+          <label>Name</label>
 
-       <input
+          <input
             type="text"
             name="name"
             placeholder="name"
             onChange={handleChange}
             value={pokemon.name}
           />
-          {/* {error.name ? <p>{error.name}</p> : null} */}
+          {errors.name ? <p>{errors.name}</p> : null}
 
           <ul>Stats</ul>
-          <input 
+          <input
             type="number"
             name="hp"
             placeholder="HP"
             onChange={handleChange}
             value={pokemon.hp}
           />
-          {/* {error.hp ? <p>{error.hp}</p> : null} */}
+          {errors.hp ? <p>{errors.hp}</p> : null}
           <input
             type="number"
             placeholder="attack"
-            name= "attack"
+            name="attack"
             onChange={handleChange}
             value={pokemon.attack}
           />
-          {/* {error.attack ? <p>{error.hp}</p> : null} */}
+          {errors.attack ? <p>{errors.hp}</p> : null}
           <input
             type="number"
             name="defense"
@@ -141,7 +193,7 @@ export function CreatePokemon() {
             onChange={handleChange}
             value={pokemon.defense}
           />
-          {/* {error.defense ? <p>{error.defense}</p> : null} */}
+          {errors.defense ? <p>{errors.defense}</p> : null}
           <input
             type="number"
             name="speed"
@@ -149,7 +201,7 @@ export function CreatePokemon() {
             onChange={handleChange}
             value={pokemon.speed}
           />
-          {/* {error.speed ? <p>{error.speed}</p> : null} */}
+          {errors.speed ? <p>{errors.speed}</p> : null}
 
           <ul>Others</ul>
           <input
@@ -159,7 +211,7 @@ export function CreatePokemon() {
             onChange={handleChange}
             value={pokemon.weight}
           />
-          {/* {error.weight ? <p>{error.weight}</p> : null} */}
+          {errors.weight ? <p>{errors.weight}</p> : null}
           <input
             type="number"
             name="height"
@@ -168,17 +220,17 @@ export function CreatePokemon() {
             value={pokemon.height}
           />
 
-{/* {error.weight ? <p>{error.weight}</p> : null} */}
+          {errors.weight ? <p>{errors.weight}</p> : null}
 
-
-          {/* <input
+          <input
             type="text"
             name="image"
             placeholder="Image"
             onChange={handleChange}
             value={pokemon.image}
-          /> */}
-          {/* {error.image ? <p>{error.image}</p> : null} */}
+          />
+
+          {errors.image ? <p>{errors.image}</p> : null}
 
           <div>
             <ul>Select types</ul>
@@ -198,11 +250,13 @@ export function CreatePokemon() {
                 </div>
               );
             })}
-            {/* {error.types ? <p>{error.types}</p> : null} */}
+            {errors.types ? <p>{errors.types}</p> : null}
           </div>
         </div>
+        {console.log(isValid, "create button validated? ")}
+        {console.log(errors, "objeto que paso a isValid")}{" "}
         {console.log(pokemon)}
-        <input  type="submit" value="Create" />
+        <input disabled={!isValid} type="submit" value="Create" />
       </form>
     </>
   );

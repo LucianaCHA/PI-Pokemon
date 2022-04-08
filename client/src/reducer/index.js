@@ -114,23 +114,6 @@ export function reducer(state = initialState, action) {
 
       const all = backUp;
 
-      console.log(
-        "AL INGRESAR AL REDUCER ALL ES LO QUE TENGO PARA FILTRAR",
-        all
-      );
-      console.log(
-        "AL INGRESAR AL REDUCER ALL ESE SUPONE IOGUAL A BACKUP ",
-        backUp
-      );
-      console.log(
-        "BACKUP DEBERIA SER IGUAL AL ESTADO DE RESGUARDO ",
-        state.backData
-      );
-      console.log(
-        "baxckup debria ser igual a consolidated",
-        state.dataConsolidated
-      );
-
       const filtered =
         action.payload === ""
           ? all
@@ -139,16 +122,7 @@ export function reducer(state = initialState, action) {
                 action.payload.charAt(0).toUpperCase() + action.payload.slice(1)
               )
             );
-      console.log("POST FILTER ALL", all);
-      console.log(
-        "POST FILTER ALL deberia ser igual a filtered xq cambi+ó",
-        filtered
-      );
-      console.log("QUE TIENE BACUP STATE", state.backData);
-      console.log(
-        "consolidated deberia ser el filtrado ",
-        state.dataConsolidated
-      );
+
       return {
         ...state,
         dataConsolidated: filtered,
@@ -157,20 +131,8 @@ export function reducer(state = initialState, action) {
 
     case FILTER_ORIGIN: {
       const backUp = state.backData;
-
       const apiDB = backUp;
-
-      console.log("AL INGRESAR AL REDUCER apiDB ES LO QUE TENGO PARA FILTRAR", apiDB);
-      console.log("AL INGRESAR AL REDUCER apiDB ESE SUPONE IOGUAL A BACKUP ",backUp);
-      console.log( "BACKUP DEBERIA SER IGUAL AL ESTADO DE RESGUARDO ",state.backData);
-      console.log('baxckup debria ser igual a consolidated', state.dataConsolidated);
-
       const byOrigin = action.payload === 'api' ? apiDB.filter((pokemon) => !isNaN(pokemon.id)) : action.payload === 'db' ? apiDB.filter((pokemon) => isNaN(pokemon.id)) : apiDB ;
-
-      console.log("POST FILTER origin apiDB es =", apiDB);
-      console.log("POST FILTER ALL deberia ser igual a filtered xq cambi+ó", byOrigin);
-      console.log("QUE TIENE BACUP STATE", state.backData);
-      console.log("consolidated deberia ser el filtrado ", state.dataConsolidated);
 
       return {
         ...state,
@@ -182,7 +144,9 @@ export function reducer(state = initialState, action) {
     case POST_POKEMON:
       console.log("ADD_POKEMON en el reducer", action.payload);
       return {
-        ...state,      };
+        ...state,    
+      
+      };
 
     // case CLEAR_STATE :
     //   return{
