@@ -21,6 +21,8 @@ export const Filters = () => {
 
   const [filter, setFilter] = React.useState("");
 
+  const[origin, setOrigin] = React.useState("");
+
   const start = (page - 1) * 12;
   const end = page * 12;
 

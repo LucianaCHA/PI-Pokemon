@@ -137,24 +137,36 @@ export const filterOrigin = (origin) => {
 }
 
 export const postPokemon = (pokemon) => {
+  console.log(pokemon , 'objeto como parametro en action ')
   return async function (dispatch) {
     return await fetch(`http://localhost:3001/pokemons`, {
       method: "POST",
+      body: JSON.stringify(pokemon),
       headers: {
         "Content-Type": "application/json",
-      },
-      body: JSON.stringify(pokemon),
+      }
+      
+    }).then(res => res.json())
+  .catch((error) => console.error('Error:', error))
+  .then((newPokemon) =>{
+    return dispatch({
+      type: POST_POKEMON,
+      payload : newPokemon
     })
-      .then((res) => res.json())
-      .then((newPokemon) => {
-        console.log("new pokemon en action ", newPokemon);
-        return dispatch({
-          type: POST_POKEMON,
-          payload: newPokemon,
-        });
-      });
+  } )
   };
+
 }
+  //     .then((res) => res.json())
+  //     .then((newPokemon) => {
+  //       console.log("new pokemon en action ", newPokemon);
+  //       return dispatch({
+  //         type: POST_POKEMON,
+  //         payload: newPokemon,
+  //       });
+  //     });
+  // };
+
 // export const clearState = () => {
 //   return {
 //     type: CLEAR_STATE,

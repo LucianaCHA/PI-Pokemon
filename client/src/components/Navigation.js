@@ -29,7 +29,7 @@ export const NavBar = () => {
 
       <SearchBar />
 
-      <NavLink to="/home/createPokemon">Create Pokemong</NavLink>
+      <NavLink to="/new">Create Pokemon</NavLink>
     </nav>
   );
 };
