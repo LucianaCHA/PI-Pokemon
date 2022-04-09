@@ -13,16 +13,17 @@ import {
 import { Pokemon } from "./Pokemon.js";
 import { Pagination } from "./Pagination.js";
 import { Filters } from "./Filters.js";
+import { ErrorPage } from "./ErrorPage.js";
 
 import "../App.css";
 import ash from "./ash-now.gif";
+import errorIMG from "../assets/E404.png";
 
 export function Home() {
   const dispatch = useDispatch();
 
   // const allPokemons = useSelector((state) => state.allPokemons);
   const { page, name, origin, allPokemons } = useSelector((state) => state);
-
 
   const [data, setData] = React.useState("back");
 
@@ -89,12 +90,17 @@ export function Home() {
         <button onClick={() => setData("front")}>Filters!</button>
       </nav>
 
+      {console.log(allPokemons.length, "allPokemons.length antes del map")}
+      {console.log("allpokemons to render?? ", allPokemons)}
       {data === "front" ? (
         <Filters />
       ) : allPokemons.length <= 0 ? (
         <img src={ash} alt="loading..." />
+      ) : allPokemons === "Pokemon does not exists" ? (
+        <ErrorPage error={<img src={errorIMG} alt="NOt found" />} />
       ) : (
         allPokemons?.paginatedPokemons?.map((pokemon) => {
+          console.log(allPokemons.length, "allPokemons.length enel map");
           console.log("allpokemons to render?? ", allPokemons);
           return (
             <NavLink to={`/home/${pokemon.id}`} key={pokemon.id}>
@@ -114,6 +120,7 @@ export function Home() {
           <button
             disabled={page - 1 === 0}
             onClick={(e) => switchPage(page - 1)}
+            hidden={page === 1 && isNaN(allPokemons?.results / 12)}
           >
             ◀️
           </button>
@@ -125,19 +132,18 @@ export function Home() {
           />
           {page}/
           {isNaN(allPokemons?.results / 12)
-            ? "(╯°□°)╯L◓ading"
+            ? 1 || "L◓ading pages..."
             : Math.ceil(allPokemons?.results / 12)}
           {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
           <button
             disabled={page + 1 > Math.ceil(allPokemons?.results / 12)}
             onClick={(e) => switchPage(page + 1)}
+            hidden={page === 1 && isNaN(allPokemons?.results / 12)}
           >
             ▶️
           </button>
         </div>
-      ) : (
-        null
-      )}
+      ) : null}
     </>
   );
 }

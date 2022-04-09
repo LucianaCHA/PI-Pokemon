@@ -5,7 +5,7 @@ import {useHistory, generatePath} from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 
-import { setName } from "../actions";
+import { setName, setPage } from "../actions";
 
 const SearchBar = () => {
 const [search, setSearch] = React.useState('');
@@ -23,9 +23,9 @@ const handleSubmit = (e) => {
       dispatch(setName(search));
       //dispatch(setPage(1));
        setSearch('');
-     // setName('');
+     setName('');
   
-      // dispatch(setPage(1));
+      dispatch(setPage(1));
       // dispatch(getAllData({name: search, page: 1}));
      
       };    

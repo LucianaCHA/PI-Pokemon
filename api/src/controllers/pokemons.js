@@ -79,7 +79,6 @@ const getApiData = async () => {
         return POKEMON_OBJECT(res);
       })
     );
-    console.log("promise all y map", apiPokemons);
     return apiPokemons;
     // let apiPokemons = await Promise.all(toCall)
     // console.log('todos los pokemons', apiPokemons)
@@ -116,10 +115,10 @@ const getAllPokemons = async (req, res, next) => {
   try {
     if (name && name !== "") {
       results = await getByName(name);
-      console.log("results!!!", results);
+      
       results === undefined
         ? res.status(404).json("Pokemon does not exists")
-        : res.status(200).json({ paginatedPokemons: results });
+        : res.status(200).json({ paginatedPokemons: [results] });
 
       //aca va si recibo nam x query }
     } else if (
@@ -136,21 +135,18 @@ const getAllPokemons = async (req, res, next) => {
       if (results.length === 0) {
         res.status(404).json("Not found");
       }
-      //let paginatedPokemons = results?.slice(start, end);
-      console.log("RESPUESTA FILTRE PAGINATED", paginatedPokemons);
+    
       res.status(200).json({ paginatedPokemons, results: results.length });
     } else {
       console.log("si el origin no es de la fn o está vacio entro en getAll");
       const apiPokemons = await getApiData();
       const dbPokemons = await getDataBD();
       const results = [...apiPokemons, ...dbPokemons];
-      console.log("RSULTS EN GETALL", results.length);
       let totalPages = Math.ceil(results.length / toShow);
 
       let paginatedPokemons = results?.slice(start, end);
-      console.log("paginatedPokemons", paginatedPokemons);
+ 
       if (page > totalPages) {
-        console.log("page y totalpages ", page, totalPages);
         console.log("hola en el if 1");
         res.status(404).json("Not found");
       }
@@ -205,7 +201,6 @@ const getById = async (req, res, next) => {
 };
 
 const getByName = async (name) => {
-  console.log("Entro a get By name y recibo name", name);
   const url = "https://pokeapi.co/api/v2/pokemon/";
   try {
     const searchDB = await Pokemon.findOne(
@@ -218,15 +213,11 @@ const getByName = async (name) => {
       },
       { include: [{ model: Type, atributes: ["name"] }] }
     );
-    // console.log('searchDB', searchDB.dataValues?.name)
-    console.log("searchDB", searchDB);
     if (searchDB === null) {
       console.log("llego a buscar en la API ");
       const searchAPI = await axios(url + name.trim().toLowerCase());
-      console.log("searchAPI", searchAPI);
 
       if (searchAPI.data) {
-        console.log("searchAPI.data", POKEMON_OBJECT(searchAPI));
 
         return [POKEMON_OBJECT(searchAPI)];
       } else {
@@ -293,7 +284,6 @@ const getByName = async (name) => {
 };
 
 const filterByOrigin = async (origin) => {
-  console.log("entro al filter by oriigin ", origin);
   if (origin.toLowerCase() === "db") {
     return await getDataBD();
   } else if (origin.toLowerCase() === "api") {
@@ -332,7 +322,7 @@ const postPokemon = async (req, res, next) => {
       height: height || Math.floor((Math.random() * 3)+0.01).toFixed(1),
       weight: weight || Math.floor((Math.random() * 150)+0.1).toFixed(1),
       image,
-      types: types || "unknown",
+      types: types || [],
     });
     if (types?.length) {
       let typeDb = await Type.findAll({

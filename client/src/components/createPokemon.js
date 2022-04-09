@@ -5,19 +5,22 @@ import { useHistory } from "react-router-dom";
 
 import { useEffect } from "react";
 
-import { getPokeTypes, postPokemon } from "../actions";
+import { getPokeTypes, postPokemon, emptyState } from "../actions";
 // import { validate } from "./validations";
 
 export function CreatePokemon() {
+
+  const image = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aGihiAJdXHQUE3L2c6O9IgHaHa%26pid%3DApi&f=1';
+
   const dispatch = useDispatch();
-
   const goBack = useHistory();
-
-  const poketypes = useSelector((state) => state.poketypes);
 
   useEffect(() => {
     dispatch(getPokeTypes());
-  }, [dispatch]);
+  },[dispatch]);
+
+  const poketypes = useSelector((state) => state.poketypes);
+  const newPokemon = useSelector((state) => state.newPokemon);
 
   function validate(pokemon) {
     let error = {};
@@ -27,30 +30,30 @@ export function CreatePokemon() {
     } 
     if(!(/^[a-zA-z]*[a-zA-Z\d\-_@&$%#\s]{3,18}$/.test(pokemon.name))) {
     error.name = 'Name must be at least 3 characters';
-    }//     console.log(error.message)
+    }
     if(pokemon.hp !== '' && pokemon.hp < 1 ) {
       error.hp = 'HP must be greater than 1 or leave it empty and toss a coin!';
     }
-    if(pokemon.hp !== '' && pokemon.hp > 255 ) {
-      error.hp = 'HP must be less than 255 or leave it empty and toss a coin!';
+    if(pokemon.hp !== '' && pokemon.hp > 151 ) {
+      error.hp = 'HP must be less than 100 or leave it empty and toss a coin!';
     }
     if(pokemon.attack !== '' && pokemon.attack < 1 ) {
       error.attack = 'Attack must be greater than 1 or leave it empty and toss a coin!';
     }
-    if(pokemon.attack !== '' && pokemon.attack > 255 ) {
-      error.attack = 'Attack must be less than 255 or leave it empty and toss a coin!';
+    if(pokemon.attack !== '' && pokemon.attack > 151 ) {
+      error.attack = 'Attack must be less than 150 or leave it empty and toss a coin!';
     }
     if(pokemon.defense !== '' && pokemon.defense < 1 ) {
       error.defense = 'Defense must be greater than 1 or leave it empty and toss a coin!';
     }
-    if(pokemon.defense !== '' && pokemon.defense > 255 ) {
-      error.defense = 'Defense must be less than 255 or leave it empty and toss a coin!';
+    if(pokemon.defense !== '' && pokemon.defense > 151 ) {
+      error.defense = 'Defense must be less than 150 or leave it empty and toss a coin!';
     }
     if(pokemon.speed !== '' && pokemon.speed < 1 ) {
       error.speed = 'HP must be greater than 1 or leave it empty and toss a coin!';
     }
-    if(pokemon.speed !== '' && pokemon.speed > 255 ) {
-      error.speed = 'HP must be less than 255 or leave it empty and toss a coin!';
+    if(pokemon.speed !== '' && pokemon.speed > 151 ) {
+      error.speed = 'HP must be less than 150 or leave it empty and toss a coin!';
     }
     if(pokemon.weight !== '' && pokemon.weight < 0.01 ) {
       error.weight = 'Weight must be greater than 0.01 kg or leave it empty and toss a coin!';
@@ -85,26 +88,28 @@ export function CreatePokemon() {
     image : "",
     weight: "",
     height: "",
+   
   });
 
   const [errors, setErrors] = React.useState({});
-
   const [isValid, setIsValid] = React.useState(false);
+  
 
   const goBackToHome = () => {
     goBack.goBack();
   };
 
+  
   useEffect(() => {
-     setErrors(validate(pokemon))
-      setIsValid(Object.keys(validate(pokemon)).length ===0);
+    setErrors(validate(pokemon))
+    setIsValid(Object.keys(validate(pokemon)).length ===0);
+
   }, [pokemon]);
 
   const handleChange = (e) => {
     e.preventDefault();
 
     setPokemon({
-     
       ...pokemon,
       [e.target.name]: e.target.value,
     });
@@ -132,19 +137,35 @@ export function CreatePokemon() {
       });
     }
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isValid) {
-      console.log(isValid, "en submit form");
-      if(pokemon.image === '') {
-        pokemon.image = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aGihiAJdXHQUE3L2c6O9IgHaHa%26pid%3DApi&f=1';
-      }
+      if(pokemon.image === '') 
+        pokemon.image = image;
+      console.log(newPokemon, "newPokemon 1");
       dispatch(postPokemon(pokemon));
-      alert("Pokemon created :) ");
+            console.log(newPokemon, "newPokemon 2");
+
+      alert('Making some Magic!');
+              
+      dispatch(postPokemon(pokemon))
+
+      console.log(newPokemon, "newPokemon 3");
+
+      if(newPokemon.message === 'Pokemon already exist'){
+        alert('Pokemon already exist');
+        setIsValid(false);
+        dispatch(emptyState());
+        console.log(newPokemon, "newPokemon 4");
+
+        console.log(newPokemon, "newPokemon en handleSubmit");
+        return null;        
+      }
+      alert(`${pokemon.name} created! :)`);
+      
       goBackToHome();
     }
-  };
+
 
   return (
     <>
@@ -161,6 +182,7 @@ export function CreatePokemon() {
           <label>Name</label>
 
           <input
+          id='nameField'
             type="text"
             name="name"
             placeholder="name"

@@ -13,6 +13,7 @@ module.exports = (sequelize) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -39,7 +40,7 @@ module.exports = (sequelize) => {
     },
     image: {
       type: DataTypes.STRING,
-      defaultValue : "https://picsum.photos/400/300",
+      defaultValue : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aGihiAJdXHQUE3L2c6O9IgHaHa%26pid%3DApi&f=1",
     },
     
   }, { timestamps: false });

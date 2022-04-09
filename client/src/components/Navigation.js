@@ -2,16 +2,15 @@ import React from "react";
 
 import { NavLink } from "react-router-dom";
 
-import { useDispatch, useSelector} from "react-redux";
+import { useDispatch} from "react-redux";
 
-import { setOrigin, setPage, setName, getAllData } from "../actions";
+import { setOrigin, setPage, setName } from "../actions";
 
-import { Pokemon } from "./Pokemon";
 import SearchBar from "./SearchBar";
 
 export const NavBar = () => {
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const handleClickReset = (e) => {
     dispatch(setOrigin(''));
     dispatch(setPage(1));
@@ -23,8 +22,7 @@ export const NavBar = () => {
       <NavLink to="/home">
         <button
           onClick={handleClickReset}
-          >HOME</button>
-        
+          >HOME</button>       
       </NavLink>
 
       <SearchBar />

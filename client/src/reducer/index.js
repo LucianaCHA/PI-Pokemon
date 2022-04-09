@@ -12,6 +12,9 @@ import {
   POST_POKEMON,
   DATA_CONSOLIDATED,
   FILTER_ORIGIN,
+  ERROR_STATUS,
+  EMPTY_STATE,
+
 } from "../actions/index.js";
 
 const initialState = {
@@ -24,12 +27,14 @@ const initialState = {
   poketypes: [],
   dataConsolidated: [],
   backData: [],
+  error: {}
 };
 
 export function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_ALL_DATA:
       console.log("allPokemnons en el reducer", action.payload);
+      console.log("selectedPokemons en el reducer", action.payload);
       return {
         ...state,
         allPokemons: action.payload,
@@ -145,14 +150,22 @@ export function reducer(state = initialState, action) {
       console.log("ADD_POKEMON en el reducer", action.payload);
       return {
         ...state,    
+        newPokemon: action.payload,      
+      };
+    case EMPTY_STATE: 
+    return{
+      ...state,
+      newPokemon: action.payload,
+    }
       
+
+      case ERROR_STATUS: 
+      console.log("ERROR_STATUS en el reducer", action.payload);
+      return {
+        ...state,
+        error: action.payload,
       };
 
-    // case CLEAR_STATE :
-    //   return{
-    //     ...state,
-
-    //   }
 
     default:
       return state;
