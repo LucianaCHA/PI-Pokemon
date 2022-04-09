@@ -1,16 +1,18 @@
 import React from "react";
 import { useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
-import { allData, sortBy, filterByType, getPokeTypes, filterOrigin} from "../actions/index";
+import { sortBy, filterByType, getPokeTypes, filterOrigin} from "../actions/index";
 
 import { Pokemon } from "./Pokemon";
 import { Pagination } from "./Pagination";
+import { ErrorPage } from "./ErrorPage";
 
-import ash from "./ash-now.gif";
-import SearchBar from './SearchBar'
-import { NavLink } from "react-router-dom";
+import errorIMG from "../assets/E400.png";
+//pokebola atributtion <a href="https://www.flaticon.es/iconos-gratis/pokemon" title="pokemon iconos">Pokemon iconos creados por Roundicons Freebies - Flaticon</a>
+
+
 
 export const Filters = () => {
   const dispatch = useDispatch();
@@ -35,15 +37,18 @@ export const Filters = () => {
   };
   
   useEffect(() => {
-    dispatch(allData());
+    //dispatch(allData());
     dispatch(getPokeTypes());
   },[dispatch]);
 
 
   const handleFilterOrigin = (e) => {
     e.preventDefault();
-    console.log(e.target.value, "TARGET VALUE EN FILTER");
+    setOrigin(e.target.value);
     dispatch(filterOrigin(e.target.value));
+
+    setPage(1)
+    
     // dispatch(getAllData(e.target.value));
   };
 
@@ -56,68 +61,15 @@ export const Filters = () => {
 
   const handleFilterType = (e) => {
     e.preventDefault();
-    
     setFilter(e.target.value);
     dispatch(filterByType(e.target.value));
-    setFilter('')
-    //setPage(1);
+    setPage(1);
   };
 
   return (
     <>
-      
-      <div> 
-      {
-        allPokemons.length <= 0 ? (
-       <img src={ash} alt="loading..." />
-     ) : (
-        allPokemons?.slice(start, end).map((pokemon) => {
-          console.log(allPokemons, 'toRenderDelFront')
-         return  ( <NavLink to={`/pokemon/${pokemon.id}`} key = {pokemon.id+'filterView'}>
-         <div className="Hola">
-           <Pokemon
-             name={pokemon.name}
-             image={pokemon.image}
-              types={pokemon.types}
-           />
-         </div>
-         </NavLink>
-         )
-        
-        }))
-      }
-      </div>
-
-
-
-      <div className="Hola">
-        <button disabled={page - 1 === 0} onClick={(e) => switchPage(page - 1)}>
-          ◀️
-        </button>
-        {console.log("pages to show", allPokemons?.length / 12)}
-        <Pagination
-          totalPages={Math.ceil(allPokemons?.length / 12)}
-          switchPage={switchPage}
-          page={page}
-        />
-        
-        {isNaN(allPokemons?.length / 12) || allPokemons?.length === 0
-          ? "(╯°□°)╯L◓ading"
-          : {page}/ (Math.ceil(allPokemons?.length / 12))|| ''}
-        {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
-        <button
-          disabled={page + 1 > Math.ceil(allPokemons?.length / 12)}
-          onClick={(e) => switchPage(page + 1)}
-        >
-          ▶️
-        </button>
-      </div>
-
-
-      
-
-      <div>
-            <select onChange={handleFilterOrigin}>
+    <div>
+          <select onChange={handleFilterOrigin}>
           <option defaultValue="all">Filter by origin</option>
           <option value="all">All</option>
           <option value="api">Pokemons from Api</option>
@@ -145,6 +97,54 @@ export const Filters = () => {
           })}
         </select>
       </div>
+  
 
+      <div> 
+      {
+        
+        allPokemons.length <= 0 ? (
+          <ErrorPage error = {<img src={errorIMG} alt= 'NO coincidences' /> }/>
+     ) : (
+        allPokemons?.slice(start, end).map((pokemon) => {
+          console.log(allPokemons, 'toRenderDelFront')
+         return  ( <NavLink to={`/home/${pokemon.id}`} key = {pokemon.id+'filterView'}>
+         <div className="Hola">
+           <Pokemon
+             name={pokemon.name}
+             image={pokemon.image}
+              types={pokemon.types}
+           />
+         </div>
+         </NavLink>
+         )
+        
+        }))
+      }
+      </div>
+
+
+      <div className="Hola">
+        <button disabled={page - 1 === 0} onClick={(e) => switchPage(page - 1)}>
+          ◀️
+        </button>
+        {console.log("pages to show", allPokemons?.length / 12)}
+        <Pagination
+          totalPages={Math.ceil(allPokemons?.length / 12)}
+          switchPage={switchPage}
+          page={page}
+        />
+        
+        {isNaN(allPokemons?.length / 12) || allPokemons?.length === 0
+          ? "(╯°□°)╯L◓ading"
+          : {page}/ (Math.ceil(allPokemons?.length / 12))|| ''}
+        {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
+        <button
+          disabled={page + 1 > Math.ceil(allPokemons?.length / 12)}
+          onClick={(e) => switchPage(page + 1)}
+        >
+          ▶️
+        </button>
+      </div>
+      
     </> )
 }
