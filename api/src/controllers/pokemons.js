@@ -87,7 +87,7 @@ const getApiData = async () => {
     // console.log(apiPokemons)
     // return apiPokemons.flat();
   } catch (error) {
-    console.log("Something went wrong", error);
+    console.log("Something went wrong fetchig data ", error);
   }
 };
 
@@ -193,7 +193,7 @@ const getById = async (req, res, next) => {
         };
         res.status(200).json(selection);
       } else {
-        res.status(404).json({ Sorry: "Invalid ID" });
+        res.status(404).json("Invalid ID" );
       }
     }
   } catch (error) {
