@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 
 import { getAllData } from "../actions";
 
-import pikachu from "../assets/buttonPika.png";
 import styles from "./LandingPage.module.css";
 
 export default function LandingPage() {
