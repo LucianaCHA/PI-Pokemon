@@ -28,8 +28,8 @@ export function CreatePokemon() {
     if (!pokemon.name) {
       error.name = "Your pokemon needs a name!";
     } 
-    if(!(/^[a-zA-z]*[a-zA-Z\d\-_@&$%#\s]{3,18}$/.test(pokemon.name))) {
-    error.name = 'Name must be at least 3 characters';
+    if(!(/^[a-zA-z]*[a-zA-Z\\-_@&$%#\s]{3,18}$/.test(pokemon.name))) {
+    error.name = 'Name must be at least 3 alphabetical characters';
     }
     if(pokemon.hp !== '' && pokemon.hp < 1 ) {
       error.hp = 'HP must be greater than 1 or leave it empty and toss a coin!';
@@ -242,7 +242,7 @@ export function CreatePokemon() {
             value={pokemon.height}
           />
 
-          {errors.weight ? <p>{errors.weight}</p> : null}
+          {errors.height ? <p>{errors.height}</p> : null}
 
           <input
             type="text"
@@ -275,9 +275,7 @@ export function CreatePokemon() {
             {errors.types ? <p>{errors.types}</p> : null}
           </div>
         </div>
-        {console.log(isValid, "create button validated? ")}
-        {console.log(errors, "objeto que paso a isValid")}{" "}
-        {console.log(pokemon)}
+       
         <input disabled={!isValid} type="submit" value="Create" />
       </form>
     </>

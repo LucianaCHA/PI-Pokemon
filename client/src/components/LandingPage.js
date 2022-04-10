@@ -7,6 +7,9 @@ import { useDispatch } from "react-redux";
 
 import { getAllData } from "../actions";
 
+import pikachu from "../assets/buttonPika.png";
+import styles from "./LandingPage.module.css";
+
 export default function LandingPage() {
   const dispatch = useDispatch();
 
@@ -16,8 +19,9 @@ export default function LandingPage() {
 
   return (
     <React.Fragment>
-      <h1>Welcome to Henry Pokemon</h1>
-      <Link to="/home">GO!</Link>
+    <div className={styles.bkg}>
+      <Link to="/home"><button className = {styles.go}>GO!</button></Link>
+      </div>
     </React.Fragment>
   );
 }

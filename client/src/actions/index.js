@@ -9,15 +9,13 @@ export const FILTER_BY_TYPE = "FILTER_BY_TYPE";
 export const POST_POKEMON = "POST_POKEMON";
 export const DATA_CONSOLIDATED = "DATA_CONSOLIDATED";
 export const FILTER_ORIGIN = "FILTER_ORIGIN";
-export const ERROR_STATUS = "ERROR_STATUS";
+//export const ERROR_STATUS = "ERROR_STATUS";
 export const EMPTY_STATE = "EMPTY_STATE";
 
 export const getAllData = (page, name, origin) => {
   return async function (dispatch) {
     return await fetch(
-      `http://localhost:3001/pokemons?page=${page || 1}&&name=${
-        name || ""
-      }&&origin=${origin || ""}`
+      `http://localhost:3001/pokemons?page=${page || 1}&&name=${name || ""}&&origin=${origin || ""}`
     )
       .then((res) => res.json())
       .then((allPokemons) => {
@@ -130,11 +128,11 @@ export const postPokemon = (pokemon) => {
       .catch((error) => console.error("Error:", error))
       .then((newPokemon) => {
         console.log(newPokemon, "newPokemon en action");
-        return dispatch({          
+        return dispatch({
           type: POST_POKEMON,
           payload: newPokemon,
         });
-      })
+      });
   };
 };
 
@@ -143,4 +141,4 @@ export const emptyState = () => {
     type: EMPTY_STATE,
     payload: {},
   };
-}
+};

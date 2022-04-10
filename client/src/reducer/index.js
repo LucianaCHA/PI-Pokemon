@@ -159,12 +159,12 @@ export function reducer(state = initialState, action) {
     }
       
 
-      case ERROR_STATUS: 
-      console.log("ERROR_STATUS en el reducer", action.payload);
-      return {
-        ...state,
-        error: action.payload,
-      };
+      // case ERROR_STATUS: 
+      // console.log("ERROR_STATUS en el reducer", action.payload);
+      // return {
+      //   ...state,
+      //   error: action.payload,
+      // };
 
 
     default:

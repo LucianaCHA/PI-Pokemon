@@ -1,0 +1,62 @@
+.bkg {
+    background-image: url('../assets/bkg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+}
+.go{
+    position: absolute;
+    top: 50%;
+    left: 50.1%;
+    transform: translate(-50%, -50%);
+    color: rgb(255, 19, 19);
+    font-family: 'Luckiest Guy';
+    font-size: 2.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    border: 7px solid black;
+    width: 7.1rem;
+    height: 7.1rem;
+    border-radius: 50%;
+    background :rgb(224, 214, 214);
+    overflow: hidden;
+    cursor: pointer;   
+    /* //position relative */
+
+}
+.go:hover{
+    background: rgb(255, 19, 19);
+    background: rgb(234, 209, 209);
+    color: white;
+    border: 5px solid white;
+ 
+}
+
+.go:hover::after{
+
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+        
+}
+
+.go:hover::before{
+    content: url('../assets/buttonPika.png');;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(200, 26, 26);
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+}
