@@ -1,47 +1,40 @@
 import React from "react";
-import {useSelector} from 'react-redux'
-
-import {useHistory, generatePath} from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 
 import { setName, setPage } from "../actions";
 
+import styles from "./SearchBar.module.css";
+
 const SearchBar = () => {
-const [search, setSearch] = React.useState('');
-const dispatch = useDispatch();
-const toRoute = useHistory();
+  const [search, setSearch] = React.useState("");
+  const dispatch = useDispatch();
 
-const allPokemons = useSelector((state) => state.allPokemons);
-
-const handleChange = (e) => {
+  const handleChange = (e) => {
     setSearch(e.target.value);
-}
+  };
 
-const handleSubmit = (e) => {
-      e.preventDefault()
-      dispatch(setName(search));
-      //dispatch(setPage(1));
-       setSearch('');
-     setName('');
-  
-      dispatch(setPage(1));
-      // dispatch(getAllData({name: search, page: 1}));
-     
-      };    
-  
-      // const handleOnClick = () => {
-      //   let id = allPokemons[0].id;
-      //   toRoute.push(generatePath("/home/:id", { id }));
-      //   console.log('HISTORY', toRoute);
-      // }
-      
-    
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(setName(search));
+    //dispatch(setPage(1));
+    setSearch("");
+    setName("");
+
+    dispatch(setPage(1));
+  };
+
   return (
-    <form onSubmit={handleSubmit} >
-      <input type="text" placeholder="Search..." value= {search} onChange={handleChange}/>
-    
-      <button type="submit">
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <input
+        className={styles.form}
+        type="text"
+        placeholder="Search..."
+        value={search}
+        onChange={handleChange}
+      />
+
+      <button className={styles.btn} type="submit">
         Search
       </button>
     </form>

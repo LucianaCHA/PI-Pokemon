@@ -8,6 +8,8 @@ import { setOrigin, setPage, setName } from "../actions";
 
 import SearchBar from "./SearchBar";
 
+import styles from "./Navigation.module.css";
+
 export const NavBar = () => {
   const dispatch = useDispatch();
   const handleClickReset = (e) => {
@@ -17,10 +19,14 @@ export const NavBar = () => {
   };
 
   return (
-    <nav>
-      <NavLink to="/new">Create Pokemon</NavLink>
+    <nav className={styles.nav}>
+      <NavLink to="/new">
+        <button className={styles.btn}>Create Pokemon</button>
+      </NavLink>
       <NavLink to="/home">
-        <button onClick={handleClickReset}>HOME</button>
+        <button className={styles.btn} onClick={handleClickReset}>
+          HOME
+        </button>
       </NavLink>
 
       <SearchBar />
