@@ -23,7 +23,7 @@
     background :rgb(224, 214, 214);
     overflow: hidden;
     cursor: pointer;   
-    /* //position relative */
+    position: relative
 
 }
 .go:hover{

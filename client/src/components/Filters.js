@@ -15,7 +15,7 @@ import { Pagination } from "./Pagination";
 import { ErrorPage } from "./ErrorPage";
 
 import errorIMG from "../assets/E400.png";
-//pokebola atributtion <a href="https://www.flaticon.es/iconos-gratis/pokemon" title="pokemon iconos">Pokemon iconos creados por Roundicons Freebies - Flaticon</a>
+import styles from './Filters.module.css';
 
 export const Filters = () => {
   const dispatch = useDispatch();
@@ -67,17 +67,17 @@ export const Filters = () => {
     setPage(1);
   };
 
-  return (
+    return (
     <>
-      <div>
-        <select onChange={handleFilterOrigin}>
+      <div className={styles.filters}>
+        <select className={styles.aside} onChange={handleFilterOrigin}>
           <option defaultValue="all">Filter by origin</option>
           <option value="all">All</option>
           <option value="api">Pokemons from Api</option>
           <option value="db">Pokemons from DB</option>
         </select>
 
-        <select onChange={handleSort}>
+        <select className={styles.aside} onChange={handleSort}>
           <option defaultValue="">Sort by:</option>
           <option value="az_up">A-Z</option>
           <option value="za_down">Z-A</option>
@@ -85,7 +85,7 @@ export const Filters = () => {
           <option value="atk_up">Weakest first</option>
         </select>
 
-        <select onChange={handleFilterType}>
+        <select className={styles.aside} onChange={handleFilterType}>
           <option defaultValue="all">Filter by type</option>
           {poketypes?.map((type) => {
             return (
@@ -97,31 +97,31 @@ export const Filters = () => {
         </select>
       </div>
 
-      <div>
+      <div  className={styles.homeContainer}>
         {allPokemons.length <= 0 ? (
+          <div className={styles.img}>
           <ErrorPage error={<img src={errorIMG} alt="NO coincidences" />} />
+          </div>
         ) : (
           allPokemons?.slice(start, end).map((pokemon) => {
-            console.log(allPokemons, "toRenderDelFront");
             return (
-              <NavLink
-                to={`/home/${pokemon.id}`}
-                key={pokemon.id + "filterView"}
-              >
-                <div className="Hola">
+              <div className={styles.container} key={pokemon.id + 'filerView'}>
+              <NavLink to={`/home/${pokemon.id}`} >
+               
                   <Pokemon
                     name={pokemon.name}
                     image={pokemon.image}
                     types={pokemon.types}
                   />
+                  </NavLink>
                 </div>
-              </NavLink>
+              
             );
           })
         )}
       </div>
 
-      <div className="Hola">
+      <div className={styles.pagination}>
         <button
           disabled={page - 1 === 0}
           onClick={(e) => switchPage(page - 1)}
@@ -129,17 +129,11 @@ export const Filters = () => {
         >
           ◀️
         </button>
-        {console.log("pages to show", allPokemons?.length / 12)}
         <Pagination
           totalPages={Math.ceil(allPokemons?.length / 12)}
           switchPage={switchPage}
           page={page}
         />
-
-        {isNaN(allPokemons?.length / 12) || allPokemons?.length === 0
-          ? 1 || 'L◓ading pages...'
-          : { page } / Math.ceil(allPokemons?.length / 12) || ""}
-        {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
         <button
           disabled={page + 1 > Math.ceil(allPokemons?.length / 12)}
           onClick={(e) => switchPage(page + 1)}
@@ -147,6 +141,12 @@ export const Filters = () => {
         >
           ▶️
         </button>
+
+        {isNaN(allPokemons?.length / 12) || allPokemons?.length === 0
+          ? 'L◓ading pages...'
+          : { page } / Math.ceil(allPokemons?.length / 12) || ""}
+        {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
+        
       </div>
     </>
   );

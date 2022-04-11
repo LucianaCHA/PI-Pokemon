@@ -11,7 +11,7 @@ const POKEMON_OBJECT = (res) => {
       res.data.name.charAt(0).toUpperCase() +
       res.data.name.slice(1).toLowerCase(),
     height: res.data.height / 10 + "m",
-    weight: res.data.weight / 10 + "kg",
+    weight: res.data.weight / 10 + "kg", 
     hp: res.data.stats[0].base_stat,
     attack: res.data.stats[1].base_stat,
     defense: res.data.stats[2].base_stat,
@@ -23,7 +23,7 @@ const POKEMON_OBJECT = (res) => {
     ),
     back: res.data.sprites.back_default,
     front: res.data.sprites.front_default,
-    image: res.data.sprites.other["official-artwork"].front_default,
+    image: res.data.sprites.other.home.front_default,
   };
 };
 const getDataBD = async () => {

@@ -7,8 +7,32 @@
   }
 }
 
+@media screen and (min-width: 400px) {
+  body {
+      margin: 20px;
+      padding: 10px;
+      height: 85vh;
+      background-color: rgb(255,254,179) ;
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 25px;
+      color: rgb(31, 5, 91);
+      text-align: center;
+  
+      } 
+    }
+
 /* font-family: 'Luckiest Guy', cursive;
-font-family: 'Oxygen', sans-serif; */
+font-family: 'Oxygen', sans-serif;
+sombra (102,101,71)
+rojo 	(251,46,1)
+aqua 	111,203,159
+arena background (255,226,138)
+otro flarito (255,254,179)
+rgb(255, 23, 0)
+rgb(255, 142, 0)
+rgb(255, 228, 0)
+rgb(6, 255, 0)
+*/
 
 .App-header {
   background-color: #282c34;

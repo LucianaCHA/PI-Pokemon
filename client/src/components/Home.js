@@ -15,9 +15,11 @@ import { Pagination } from "./Pagination.js";
 import { Filters } from "./Filters.js";
 import { ErrorPage } from "./ErrorPage.js";
 
-import "../App.css";
 import ash from "./ash-now.gif";
 import errorIMG from "../assets/E404.png";
+
+import "../App.css";
+import styles from "./Home.module.css";
 
 export function Home() {
   const dispatch = useDispatch();
@@ -80,138 +82,75 @@ export function Home() {
 
   return (
     <>
-      <nav>
-        <button onClick={handleClick} value="api">
-          Check Api!
-        </button>
-        <button onClick={handleClick} value="db">
-          Check yours!
-        </button>
-        <button onClick={() => setData("front")}>Filters!</button>
-      </nav>
-
-      {console.log(allPokemons.length, "allPokemons.length antes del map")}
-      {console.log("allpokemons to render?? ", allPokemons)}
-      {data === "front" ? (
-        <Filters />
-      ) : allPokemons.length <= 0 ? (
-        <img src={ash} alt="loading..." />
-      ) : allPokemons === "Pokemon does not exists" ? (
-        <ErrorPage error={<img src={errorIMG} alt="NOt found" />} />
-      ) : (
-        allPokemons?.paginatedPokemons?.map((pokemon) => {
-          console.log(allPokemons.length, "allPokemons.length enel map");
-          console.log("allpokemons to render?? ", allPokemons);
-          return (
-            <NavLink to={`/home/${pokemon.id}`} key={pokemon.id}>
-              <div className="Hola">
-                <Pokemon
-                  name={pokemon.name}
-                  image={pokemon.image}
-                  types={pokemon.types}
-                />
+    <aside className={styles.aside}>
+          <button className={styles.btnAside} onClick={handleClick} value="api">
+            Check Api!
+          </button>
+          <button className={styles.btnAside} onClick={handleClick} value="db">
+            Check yours!
+          </button>
+          <button className={styles.btnAside} onClick={() => setData("front")}>More filters!</button>
+        </aside>
+    <div className={styles.homeContainer}>
+      
+        {data === "front" ? (
+          <Filters />
+        ) : allPokemons.length <= 0 ? (
+          <img className={styles.loading} src={ash} alt="loading..." />
+        ) : allPokemons === "Pokemon does not exists" ? (
+          <ErrorPage error={<img src={errorIMG} alt="Not found" />} />
+        ) : (
+          allPokemons?.paginatedPokemons?.map((pokemon) => {
+            return (
+              
+              <div className={styles.container} key={pokemon.id}>
+              <NavLink to={`/home/${pokemon.id}`} >
+                
+                  <Pokemon
+                    name={pokemon.name}
+                    image={pokemon.image}
+                    types={pokemon.types}
+                  />
+                
+              </NavLink>
               </div>
-            </NavLink>
-          );
-        })
-      )}
-      {data === "back" ? (
-        <div className="Hola">
-          <button
-            disabled={page - 1 === 0}
-            onClick={(e) => switchPage(page - 1)}
-            hidden={page === 1 && isNaN(allPokemons?.results / 12)}
-          >
-            ◀️
-          </button>
-          {console.log("pages to show", allPokemons?.results / 12)}
-          <Pagination
-            totalPages={Math.ceil(allPokemons?.results / 12)}
-            switchPage={switchPage}
-            page={page}
-          />
-          {page}/
-          {isNaN(allPokemons?.results / 12)
-            ? 1 || "L◓ading pages..."
-            : Math.ceil(allPokemons?.results / 12)}
-          {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
-          <button
-            disabled={page + 1 > Math.ceil(allPokemons?.results / 12)}
-            onClick={(e) => switchPage(page + 1)}
-            hidden={page === 1 && isNaN(allPokemons?.results / 12)}
-          >
-            ▶️
-          </button>
-        </div>
-      ) : null}
+              
+            );
+            
+          })
+        )}
+       
+        {data === "back" ? (
+          <div className={styles.pagination}>
+            <button
+              disabled={page - 1 === 0}
+              onClick={(e) => switchPage(page - 1)}
+              hidden={page === 1 && isNaN(allPokemons?.results / 12)}
+            >
+              ◀️
+            </button>
+            <Pagination
+              totalPages={Math.ceil(allPokemons?.results / 12)}
+              switchPage={switchPage}
+              page={page}
+            />
+            <button
+              disabled={page + 1 > Math.ceil(allPokemons?.results / 12)}
+              onClick={(e) => switchPage(page + 1)}
+              hidden={page === 1 && isNaN(allPokemons?.results / 12)}
+            >
+              ▶️
+            </button>
+            {page}/
+            {isNaN(allPokemons?.results / 12)
+              ? "L◓ading pages..."
+              : Math.ceil(allPokemons?.results / 12)}
+            {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
+            
+          </div>
+        ) : null}
+        
+      </div>
     </>
   );
 }
-
-//  {/* {data === 'front'&& allPokemons?.paginatedPokemons?.map((data) =>{
-// return (<NavLink to={`/home/${data.id}`} key={data.id}>
-//               <div className="Hola">
-//                 <Pokemon
-//                   name={data.name}
-//                   image={data.image}
-//                   types={data.types}
-//                 />
-//               </div>
-//             </NavLink>)
-
-// }) }: {
-//       allPokemons.length <= 0 ? (
-//         <img src={ash} alt="loading..." />
-//       ) : (
-//         allPokemons?.paginatedPokemons?.map((pokemon) => {
-//           console.log("allpokemons to render?? ", allPokemons);
-//           return (
-//             <NavLink to={`/home/${pokemon.id}`} key={pokemon.id}>
-//               <div className="Hola">
-//                 <Pokemon
-//                   name={pokemon.name}
-//                   image={pokemon.image}
-//                   types={pokemon.types}
-//                 />
-//               </div>
-//             </NavLink>
-//           );
-//         })
-//       // )} */}
-
-//       // <br />
-
-//       // <br />
-//       // {isNaN(allPokemons?.results / 12) ? (
-//       //   <button onClick={(e) => handleClickReset(e)}>Reset Filters</button>
-//       // ) : (
-
-//       // <div>
-//       //       <select onChange={handleFilterOrigin}>
-//       //     <option defaultValue="all">Filter by origin</option>
-//       //     <option value="all">All</option>
-//       //     <option value="api">Pokemons from Api</option>
-//       //     <option value="db">Pokemons from DB</option>
-//       //   </select>
-
-//       //   <select onChange={handleSort}>
-//       //     <option defaultValue="">Sort by:</option>
-//       //     <option value="az_up">A-Z</option>
-//       //     <option value="za_down">Z-A</option>
-//       //     <option value="atk_down">Strongest first</option>
-//       //     <option value="atk_up">Weakest first</option>
-//       //   </select>
-
-//       //   <select onChange={handleFilterType}>
-//       //     <option defaultValue="all">Filter by type</option>
-//       //     {poketypes?.map((type) => {
-//       //       return (
-//       //         <option value={type.name.charAt(0) + type.name.slice(1)}>
-//       //           {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
-//       //         </option>
-//       //       );
-//       //     })}
-//       //   </select>
-
-//       //   <button onClick={(e) => handleClickReset(e)}>Reset Filters</button>
-//       // </div>

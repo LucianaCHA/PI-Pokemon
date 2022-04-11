@@ -1,13 +1,14 @@
 import React from "react";
-
+import styles from "./Pokemon.module.css";
 export function Pokemon({id, name, image, types})
 {
+  
   return (
-    <div key={id}>
-      <h3>
-        {name}
-      </h3>
+    <div className={styles.container}>
+    <div className={styles.card}key={id}>
+      
       <img
+      className= {styles.image}
         src={image}
         alt={name}
         border="1px solid #ddd"
@@ -16,14 +17,21 @@ export function Pokemon({id, name, image, types})
         width="250em"
         height="250em"
       />
-    
+      <div className ={styles.info}>
+    <h3>
+        {name}
+      </h3>
       {types?.map((type) => {
         return (
-          <li key={type}>
+          <button  className ={styles.btn} key={type}>
             {type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
-          </li>
+          </button>
+         
         );
       })}
+      </div>
+    </div>
     </div>
   );
+  
 }
