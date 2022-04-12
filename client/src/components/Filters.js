@@ -8,6 +8,7 @@ import {
   filterByType,
   getPokeTypes,
   filterOrigin,
+  
 } from "../actions/index";
 
 import { Pokemon } from "./Pokemon";
@@ -15,25 +16,25 @@ import { Pagination } from "./Pagination";
 import { ErrorPage } from "./ErrorPage";
 
 import errorIMG from "../assets/E400.png";
-import styles from './Filters.module.css';
+import styles from "./Filters.module.css";
 
 export const Filters = () => {
   const dispatch = useDispatch();
 
-  const [order, setOrder] = React.useState("");
+  const [, setOrder] = React.useState("");
 
   const [page, setPage] = React.useState(1);
 
-  const [filter, setFilter] = React.useState("");
+  const [, setFilter] = React.useState("");
 
-  const [origin, setOrigin] = React.useState("");
+  const [, setOrigin] = React.useState("");
 
   const start = (page - 1) * 12;
   const end = page * 12;
 
-  //const allPokemons = useSelector((state) => state.allPokemons);
   const allPokemons = useSelector((state) => state.dataConsolidated);
   const poketypes = useSelector((state) => state.poketypes);
+
 
   const switchPage = (page) => {
     setPage(page);
@@ -44,6 +45,7 @@ export const Filters = () => {
     dispatch(getPokeTypes());
   }, [dispatch]);
 
+  
   const handleFilterOrigin = (e) => {
     e.preventDefault();
     setOrigin(e.target.value);
@@ -67,7 +69,7 @@ export const Filters = () => {
     setPage(1);
   };
 
-    return (
+  return (
     <>
       <div className={styles.filters}>
         <select className={styles.aside} onChange={handleFilterOrigin}>
@@ -89,7 +91,10 @@ export const Filters = () => {
           <option defaultValue="all">Filter by type</option>
           {poketypes?.map((type) => {
             return (
-              <option value={type.name.charAt(0) + type.name.slice(1)}>
+              <option
+                key={type.name}
+                value={type.name.charAt(0) + type.name.slice(1)}
+              >
                 {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
               </option>
             );
@@ -97,33 +102,30 @@ export const Filters = () => {
         </select>
       </div>
 
-      <div  className={styles.homeContainer}>
+      <div className={styles.homeContainer}>
         {allPokemons.length <= 0 ? (
           <div className={styles.img}>
-          <ErrorPage error={<img src={errorIMG} alt="NO coincidences" />} />
+            <ErrorPage error={<img src={errorIMG} alt="NO coincidences" />} />
           </div>
         ) : (
           allPokemons?.slice(start, end).map((pokemon) => {
             return (
-              <div className={styles.container} key={pokemon.id + 'filerView'}>
-              <NavLink to={`/home/${pokemon.id}`} >
-               
+              <div className={styles.container} key={pokemon.id + "filterView"}>
+                <NavLink to={`/home/${pokemon.id}`}>
                   <Pokemon
                     name={pokemon.name}
                     image={pokemon.image}
                     types={pokemon.types}
                   />
-                  </NavLink>
-                </div>
-              
+                </NavLink>
+              </div>
             );
           })
         )}
       </div>
 
       <div className={styles.pagination}>
-        <button
-          disabled={page - 1 === 0}
+        <button className={styles.btn}          disabled={page - 1 === 0}
           onClick={(e) => switchPage(page - 1)}
           hidden={page === 1 && isNaN(allPokemons?.results / 12)}
         >
@@ -134,7 +136,7 @@ export const Filters = () => {
           switchPage={switchPage}
           page={page}
         />
-        <button
+        <button className={styles.btn} 
           disabled={page + 1 > Math.ceil(allPokemons?.length / 12)}
           onClick={(e) => switchPage(page + 1)}
           hidden={page === 1 && isNaN(allPokemons?.results / 12)}
@@ -143,10 +145,9 @@ export const Filters = () => {
         </button>
 
         {isNaN(allPokemons?.length / 12) || allPokemons?.length === 0
-          ? 'L◓ading pages...'
+          ? "L◓ading pages..."
           : { page } / Math.ceil(allPokemons?.length / 12) || ""}
         {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
-        
       </div>
     </>
   );

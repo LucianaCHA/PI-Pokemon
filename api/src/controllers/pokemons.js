@@ -86,7 +86,7 @@ const getApiData = async () => {
     // console.log(apiPokemons)
     // return apiPokemons.flat();
   } catch (error) {
-    console.log("Something went wrong fetchig data ", error);
+    console.log(error)
   }
 };
 
@@ -117,7 +117,7 @@ const getAllPokemons = async (req, res, next) => {
       results = await getByName(name);
       
       results === undefined
-        ? res.status(404).json("Pokemon does not exists")
+        ? res.status(404).json("Not found")
         : res.status(200).json({ paginatedPokemons: [results] });
 
       //aca va si recibo nam x query }
@@ -138,7 +138,6 @@ const getAllPokemons = async (req, res, next) => {
     
       res.status(200).json({ paginatedPokemons, results: results.length });
     } else {
-      console.log("si el origin no es de la fn o está vacio entro en getAll");
       const apiPokemons = await getApiData();
       const dbPokemons = await getDataBD();
       const results = [...apiPokemons, ...dbPokemons];
@@ -147,14 +146,11 @@ const getAllPokemons = async (req, res, next) => {
       let paginatedPokemons = results?.slice(start, end);
  
       if (page > totalPages) {
-        console.log("hola en el if 1");
         res.status(404).json("Not found");
       }
       if (results.length === 0) {
-        console.log("hola en el if 2");
         res.status(404).json("Not found");
       }
-      console.log("hola en el if 3");
       res.status(200).json({ paginatedPokemons, results: results.length });
     }
   } catch (error) {
@@ -168,12 +164,13 @@ const getById = async (req, res, next) => {
     if (id && !isNaN(id)) {
       const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
       const selection = await axios(url);
-      console.log("ID", selection.data);
 
       selection.data ? res.status(200).json(POKEMON_OBJECT(selection)) : null;
-    } else {
+    } else if ((/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))) {
       const search = await Pokemon.findByPk(id, { include: [Type] });
-      if (search) {
+      if(search === null){
+        res.status(404).json("Invalid ID" );
+      }else{
         const selection = {
           id: search.id,
           name: search.name,
@@ -188,11 +185,11 @@ const getById = async (req, res, next) => {
           image: search.image,
         };
         res.status(200).json(selection);
-      } else {
-        res.status(404).json("Invalid ID" );
+      } 
       }
+      res.status(404).json("Invalid ID");
     }
-  } catch (error) {
+  catch (error) {
     if (error.response) {
       res.status(error.response.status).json(error.response.data);
     }
@@ -214,12 +211,11 @@ const getByName = async (name) => {
       { include: [{ model: Type, atributes: ["name"] }] }
     );
     if (searchDB === null) {
-      console.log("llego a buscar en la API ");
       const searchAPI = await axios(url + name.trim().toLowerCase());
 
       if (searchAPI.data) {
 
-        return [POKEMON_OBJECT(searchAPI)];
+        return POKEMON_OBJECT(searchAPI);
       } else {
         return undefined;
       }
@@ -319,8 +315,8 @@ const postPokemon = async (req, res, next) => {
       attack: attack || Math.floor(Math.random() * 150) + 1,
       defense: defense || Math.floor(Math.random() * 150) + 1,
       speed: speed || Math.floor(Math.random() * 150) + 1,
-      height: height || Math.floor((Math.random() * 3)+0.01).toFixed(1),
-      weight: weight || Math.floor((Math.random() * 150)+0.1).toFixed(1),
+      height: height  || Math.floor((Math.random() * 3)+0.01).toFixed(1),
+      weight: weight || Math.floor((Math.random() * 150)+0.1).toFixed(1) ,
       image,
       types: types || [],
     });

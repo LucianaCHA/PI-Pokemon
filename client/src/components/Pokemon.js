@@ -1,14 +1,15 @@
 import React from "react";
+
 import styles from "./Pokemon.module.css";
 export function Pokemon({id, name, image, types})
 {
   
   return (
-    <div className={styles.container}>
-    <div className={styles.card}key={id}>
+    <div className={styles.container} >
+    <div className={styles.card} key={id}>
       
       <img
-      className= {styles.image}
+        className= {styles.image}
         src={image}
         alt={name}
         border="1px solid #ddd"
@@ -18,7 +19,8 @@ export function Pokemon({id, name, image, types})
         height="250em"
       />
       <div className ={styles.info}>
-    <h3>
+
+      <h3>
         {name}
       </h3>
       {types?.map((type) => {

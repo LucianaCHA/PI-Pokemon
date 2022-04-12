@@ -12,9 +12,9 @@
     background-color: blue;
 }
 .go{
-   
-    top:50%;
-    margin-left: 7%;
+    position: relative;
+    top:50vh;
+    margin-left: 7vw;
     align-items: center;
     transform: translate(-50%, -50%);
     color: rgb(255, 19, 19);
@@ -29,7 +29,7 @@
     background :rgb(224, 214, 214);
     overflow: hidden;
     cursor: pointer;   
-    position: relative
+    
 
 }
 .go:hover{

@@ -19,12 +19,13 @@ const SearchBar = () => {
     dispatch(setName(search));
     //dispatch(setPage(1));
     setSearch("");
-    setName("");
+    //setName("");
 
     dispatch(setPage(1));
   };
 
   return (
+    <div className={styles.searchBar}>
     <form className={styles.form} onSubmit={handleSubmit}>
       <input
         className={styles.form}
@@ -38,6 +39,7 @@ const SearchBar = () => {
         Search
       </button>
     </form>
+    </div>
   );
 };
 export default SearchBar;

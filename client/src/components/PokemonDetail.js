@@ -7,7 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { ErrorPage } from "./ErrorPage";
 import { getById } from "../actions/index.js";
 
-import errorIMG from '../assets/E404.png';
+import errorIMG from "../assets/E404.png";
+import errorUUID from '../assets/E400ID.png';
+import styles from "./PokemonDetail.module.css";
 
 export function PokemonDetail(props) {
   const id = props.match.params.id;
@@ -23,28 +25,58 @@ export function PokemonDetail(props) {
 
   useEffect(() => {
     dispatch(getById(id));
-
-    // dispatch(getById(id));
   }, [dispatch, id]);
 
   return selectedPokemon === "Not Found" ? (
-    <ErrorPage error={<img src={errorIMG} alt="NOt found" />}/>
-  ) : (
+    <ErrorPage error={<img src={errorIMG} alt="Not found" />} />
+  ) : selectedPokemon === 'Invalid ID'? (
+    <ErrorPage error={<img src={errorUUID} alt="Invalid Id" />} />
+  ): (
     <>
-      
-      <button onClick={goToBack}>🔙</button>
-      <h1>{selectedPokemon.name}</h1>
-      <img
-        src={selectedPokemon.image}
-        alt={selectedPokemon.name}
-        border="1px solid #ddd"
-        radius="45px"
-        padding="4px"
-        width="250em"
-        height="250em"
-      />
-      <p>#{selectedPokemon.id}</p>
-      <h2>Stats</h2>
+      <button className={styles.btn} onClick={goToBack}>
+        🔙
+      </button>
+
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <h1 className={styles.name}> {selectedPokemon.name}</h1>
+          <div className={styles.image}>
+            <img
+              className={styles.img}
+              src={selectedPokemon.image}
+              alt= {selectedPokemon.name}
+            />
+            <p className={styles.id}>#{selectedPokemon.id}</p>
+          </div>
+        </div>
+
+        <div className={styles.info}>
+          <div className={styles.stats}>
+            <ul>
+              <li>HP: {selectedPokemon.hp}</li>
+              <li>Attack: {selectedPokemon.attack}</li>
+              <li>Defense: {selectedPokemon.defense}</li>
+              <li>Speed: {selectedPokemon.speed}</li>
+              <li>Weight: {selectedPokemon.weight}</li>
+              <li>Height: {selectedPokemon.height}</li>
+            </ul>
+          </div>
+
+          <div className={styles.types}>
+            <ul>
+              {selectedPokemon?.types?.map((type) => {
+                return (
+                  <li key={type}>
+                    {type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className= {styles.stats}>
       <ul>
         <li>HP: {selectedPokemon.hp}</li>
         <li>Attack: {selectedPokemon.attack}</li>
@@ -53,7 +85,9 @@ export function PokemonDetail(props) {
         <li>Weight: {selectedPokemon.weight}</li>
         <li>Height: {selectedPokemon.height}</li>
       </ul>
-      <h2>Types</h2>
+      </div>
+
+      <div className={styles.types}>
       <ul>
         {selectedPokemon?.types?.map((type) => {
           return (
@@ -63,7 +97,10 @@ export function PokemonDetail(props) {
           );
         })}
       </ul>
+      </div>
+      </div>
+      </div>
+      </div> */}
     </>
   );
- 
 }

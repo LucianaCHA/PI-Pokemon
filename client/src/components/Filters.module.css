@@ -65,6 +65,31 @@
     grid-row-end: 6;
     bottom: 0;
 }
+.btn{
+    background-color: #ff3d00;
+    box-shadow: 0 10px 20px rgba(111,203,159,0.19), inset 0px -7px 12px 1px rgb(136, 12, 3);
+    border-radius: 20px;
+    color: #fff;    
+    border: none;
+    padding: 10px;
+    font-size: 2rem;
+    font-weight: light;
+    box-shadow: #ff8000;
+    transition: all 0.4s ease-in-out;
+}
+.btn:hover{
+    background-color: #ff8000;
+    box-shadow: 0 10px 20px rgba(111,203,159,0.19), inset 0px -7px 12px 1px rgb(136, 12, 3);
+    border-radius: 20px;
+    color: #fff;    
+    border: none;
+    padding: 10px;
+    font-size: 2rem;
+    font-weight: light;
+    box-shadow: #ff3d00;
+    transition: all 0.4s ease-in-out;
+    cursor: pointer;
+}
 
  
 }

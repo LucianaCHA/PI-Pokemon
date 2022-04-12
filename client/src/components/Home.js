@@ -5,15 +5,16 @@ import { NavLink } from "react-router-dom";
 
 import {
   getAllData,
-  setOrigin,
   setPage,
   getPokeTypes,
   allData,
 } from "../actions/index.js";
+
 import { Pokemon } from "./Pokemon.js";
 import { Pagination } from "./Pagination.js";
 import { Filters } from "./Filters.js";
 import { ErrorPage } from "./ErrorPage.js";
+import SearchBar from "./SearchBar.js";
 
 import ash from "./ash-now.gif";
 import errorIMG from "../assets/E404.png";
@@ -24,7 +25,6 @@ import styles from "./Home.module.css";
 export function Home() {
   const dispatch = useDispatch();
 
-  // const allPokemons = useSelector((state) => state.allPokemons);
   const { page, name, origin, allPokemons } = useSelector((state) => state);
 
   const [data, setData] = React.useState("back");
@@ -62,7 +62,9 @@ export function Home() {
   const handleClick = (e) => {
     e.preventDefault();
     setData("back");
-    dispatch(setOrigin(e.target.value));
+    // dispatch(setPage(1));
+    // dispatch(setOrigin(e.target.value));
+    dispatch(getAllData(1, '', e.target.value));
   };
 
   // const handleSort = (e) => {
@@ -82,74 +84,76 @@ export function Home() {
 
   return (
     <>
-    <aside className={styles.aside}>
-          <button className={styles.btnAside} onClick={handleClick} value="api">
-            Check Api!
-          </button>
-          <button className={styles.btnAside} onClick={handleClick} value="db">
-            Check yours!
-          </button>
-          <button className={styles.btnAside} onClick={() => setData("front")}>More filters!</button>
-        </aside>
-    <div className={styles.homeContainer}>
-      
+    {data === 'back'? <SearchBar /> : null}
+      <aside className={styles.aside}>
+        <button className={styles.btnAside} onClick={handleClick} value="api">
+          Check Api!
+        </button>
+        <button className={styles.btnAside} onClick={handleClick} value="db">
+          Check yours!
+        </button>
+        <button className={styles.btnAside} onClick={() => setData("front")}>
+          More filters!
+        </button>
+      </aside>
+
+      <div className={styles.homeContainer}>
         {data === "front" ? (
           <Filters />
         ) : allPokemons.length <= 0 ? (
           <img className={styles.loading} src={ash} alt="loading..." />
-        ) : allPokemons === "Pokemon does not exists" ? (
-          <ErrorPage error={<img src={errorIMG} alt="Not found" />} />
-        ) : (
-          allPokemons?.paginatedPokemons?.map((pokemon) => {
+        ) : allPokemons === "Not found" ? (
+          <ErrorPage className={styles.img}error={<img src={errorIMG} alt="Not found" />}/>
+        ) : (          
+          allPokemons?.paginatedPokemons.map((pokemon) => {
             return (
-              
-              <div className={styles.container} key={pokemon.id}>
-              <NavLink to={`/home/${pokemon.id}`} >
-                
+              <div className={styles.container} key={pokemon.id+'hola'}>
+              <NavLink to={`/home/${pokemon.id}`}>            
+
                   <Pokemon
+                  key={pokemon.id}
                     name={pokemon.name}
                     image={pokemon.image}
                     types={pokemon.types}
-                  />
-                
+                  />                            
+
               </NavLink>
+
               </div>
-              
             );
-            
           })
         )}
-       
+
         {data === "back" ? (
           <div className={styles.pagination}>
-            <button
+            <button className={styles.btn}
               disabled={page - 1 === 0}
               onClick={(e) => switchPage(page - 1)}
               hidden={page === 1 && isNaN(allPokemons?.results / 12)}
             >
               ◀️
             </button>
-            <Pagination
+            <Pagination 
               totalPages={Math.ceil(allPokemons?.results / 12)}
               switchPage={switchPage}
               page={page}
             />
-            <button
+            <button className={styles.btn}
               disabled={page + 1 > Math.ceil(allPokemons?.results / 12)}
               onClick={(e) => switchPage(page + 1)}
               hidden={page === 1 && isNaN(allPokemons?.results / 12)}
             >
               ▶️
             </button>
-            {page}/
-            {isNaN(allPokemons?.results / 12)
-              ? "L◓ading pages..."
-              : Math.ceil(allPokemons?.results / 12)}
-            {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
-            
+            <button className={styles.btn} hidden={<ErrorPage />}>
+              {page}/
+              {isNaN(allPokemons?.results / 12)
+                ? "L◓ading pages..."
+                : Math.ceil(allPokemons?.results / 12)}
+              {/* https://www.fastemoji.com/(%E2%95%AF%C2%B0%E2%96%A1%C2%B0)%E2%95%AF%EF%B8%B5%E2%97%93-Meaning-Emoji-Emoticon-Throwpokeball-Ascii-Art-Pokemon-Throw-Battle-Japanese-Kaomoji-Smileys-62987.html */}
+            </button>
           </div>
         ) : null}
-        
       </div>
     </>
   );

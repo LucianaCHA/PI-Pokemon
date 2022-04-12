@@ -4,13 +4,72 @@
     border-radius: 20px;
     color: #fff;    
     border: none;
-    padding: 10px;
-    font-size: 2rem;
+    padding: 15px;
+    font-size: 3rem;
     font-weight: light;
     box-shadow: #ff8000;
     transition: all 0.4s ease-in-out;
 }
 .btn:hover{
+    background-color: #ff8000;
+    box-shadow: 0 10px 20px rgba(111,203,159,0.19), inset 0px -7px 12px 1px rgb(136, 12, 3);
+    border-radius: 20px;
+    color: #fff;    
+    border: none;
+    padding: 10px;
+    font-size: 2rem;
+    font-weight: light;
+    box-shadow: #ff3d00;
+    transition: all 0.4s ease-in-out;
     cursor: pointer;
+}
+.error{
+    color: red;
+    font-size: 1rem;
+}
 
+input{
+    border: none;
+    border-bottom: 1px solid #ff3d00;
+    background-color: #fff;
+    color: #ff3d00;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 10px;
+    box-shadow: 0 5px 20px rgba(111,203,159,0.19), inset 0px -7px 12px 1px rgb(133, 228, 39);
+    border-radius: 20px;
+    
+}
+
+.fields{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    margin-top: 10%;
+}
+
+.check{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+
+}
+
+input[type=checkbox]
+{
+  /* Doble-tamaño Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari y Chrome */
+  -o-transform: scale(2); /* Opera */
+  padding: 10px;
+}
+
+/* Tal vez desee envolver un espacio alrededor de su texto de casilla de verificación */
+.checkboxtexto
+{
+  /* Checkbox texto */
+  font-size: 1rem;
+  /* display: inline; */
 }

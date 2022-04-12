@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 
 import { setOrigin, setPage, setName } from "../actions";
 
-import SearchBar from "./SearchBar";
 
 import styles from "./Navigation.module.css";
 
@@ -29,7 +28,7 @@ export const NavBar = () => {
         </button>
       </NavLink>
 
-      <SearchBar />
+     
     </nav>
   );
 };

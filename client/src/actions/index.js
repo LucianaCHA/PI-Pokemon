@@ -11,6 +11,7 @@ export const DATA_CONSOLIDATED = "DATA_CONSOLIDATED";
 export const FILTER_ORIGIN = "FILTER_ORIGIN";
 //export const ERROR_STATUS = "ERROR_STATUS";
 export const EMPTY_STATE = "EMPTY_STATE";
+export const FILTER_NAME = "FILTER_NAME";
 
 export const getAllData = (page, name, origin) => {
   return async function (dispatch) {
@@ -114,6 +115,13 @@ export const filterOrigin = (origin) => {
   };
 };
 
+export const filterByName = (name) => {
+  return {
+    type: FILTER_NAME,
+    payload: name,
+  }
+}
+
 export const postPokemon = (pokemon) => {
   console.log(pokemon, "objeto como parametro en action ");
   return async function (dispatch) {
@@ -127,7 +135,6 @@ export const postPokemon = (pokemon) => {
       .then((res) => res.json())
       .catch((error) => console.error("Error:", error))
       .then((newPokemon) => {
-        console.log(newPokemon, "newPokemon en action");
         return dispatch({
           type: POST_POKEMON,
           payload: newPokemon,

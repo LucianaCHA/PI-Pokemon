@@ -1,14 +1,8 @@
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { NavLink } from 'react-router-dom';
+import React from "react";
 
+import styles from './ErrorPage.module.css';
 
+export const ErrorPage = ({ error }) => {
 
-export const ErrorPage =({error}) => {
-    
-    
-    return (
-        <>{error}</>
-    )
-
-}
+  return (<div className= {styles.error}>{error}</div>)
+};

@@ -12,7 +12,7 @@ import {
   POST_POKEMON,
   DATA_CONSOLIDATED,
   FILTER_ORIGIN,
-  ERROR_STATUS,
+  // ERROR_STATUS,
   EMPTY_STATE,
 
 } from "../actions/index.js";
@@ -27,14 +27,13 @@ const initialState = {
   poketypes: [],
   dataConsolidated: [],
   backData: [],
-  error: {}
+  error: {},
 };
 
 export function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_ALL_DATA:
-      console.log("allPokemnons en el reducer", action.payload);
-      console.log("selectedPokemons en el reducer", action.payload);
+
       return {
         ...state,
         allPokemons: action.payload,
@@ -47,17 +46,13 @@ export function reducer(state = initialState, action) {
         page: action.payload,
       };
     }
-
     case SET_NAME: {
-      console.log("SET_namE en el reducer", action.p);
       return {
         ...state,
         name: action.payload,
       };
     }
-
     case GET_BY_ID: {
-      console.log("selectedbY ID  en el reducer", action.payload);
       return {
         ...state,
         selectedPokemon: action.payload,
@@ -72,7 +67,6 @@ export function reducer(state = initialState, action) {
     }
     case SORT_BY: {
       const data = state.dataConsolidated;
-      console.log(data, "state de data totsal en reducer de redux");
       let sortedPokemons;
       if (action.payload === "az_up") {
         sortedPokemons = data.sort((a, b) => {
@@ -98,7 +92,6 @@ export function reducer(state = initialState, action) {
     }
 
     case DATA_CONSOLIDATED: {
-      console.log("consolidated en reducer ");
       return {
         ...state,
         backData: action.payload,
@@ -107,7 +100,6 @@ export function reducer(state = initialState, action) {
     }
 
     case GET_POKE_TYPES: {
-      console.log("poketypes en el reducer", action.payload);
       return {
         ...state,
         poketypes: action.payload,
@@ -116,9 +108,7 @@ export function reducer(state = initialState, action) {
 
     case FILTER_BY_TYPE: {
       const backUp = state.backData;
-
       const all = backUp;
-
       const filtered =
         action.payload === ""
           ? all
@@ -145,9 +135,7 @@ export function reducer(state = initialState, action) {
       };
     }
 
-
     case POST_POKEMON:
-      console.log("ADD_POKEMON en el reducer", action.payload);
       return {
         ...state,    
         newPokemon: action.payload,      
@@ -157,16 +145,12 @@ export function reducer(state = initialState, action) {
       ...state,
       newPokemon: action.payload,
     }
-      
-
       // case ERROR_STATUS: 
       // console.log("ERROR_STATUS en el reducer", action.payload);
       // return {
       //   ...state,
       //   error: action.payload,
       // };
-
-
     default:
       return state;
   }
