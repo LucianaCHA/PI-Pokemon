@@ -14,7 +14,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     dispatch(getAllData());
-  }, [dispatch]);
+  }, []);
 
   return (
     <React.Fragment>

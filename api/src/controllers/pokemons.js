@@ -80,11 +80,7 @@ const getApiData = async () => {
       })
     );
     return apiPokemons;
-    // let apiPokemons = await Promise.all(toCall)
-    // console.log('todos los pokemons', apiPokemons)
-    // apiPokemons = apiPokemons.map(res=>res.data)
-    // console.log(apiPokemons)
-    // return apiPokemons.flat();
+
   } catch (error) {
     console.log(error)
   }
@@ -120,7 +116,6 @@ const getAllPokemons = async (req, res, next) => {
         ? res.status(404).json("Not found")
         : res.status(200).json({ paginatedPokemons: [results] });
 
-      //aca va si recibo nam x query }
     } else if (
       (origin && origin?.toLowerCase() === "db") ||
       origin?.toLowerCase() === "api"
@@ -157,6 +152,9 @@ const getAllPokemons = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
 const getById = async (req, res, next) => {
   const { id } = req.params;
 
@@ -193,7 +191,6 @@ const getById = async (req, res, next) => {
     if (error.response) {
       res.status(error.response.status).json(error.response.data);
     }
-    console.log(error);
   }
 };
 
@@ -236,44 +233,7 @@ const getByName = async (name) => {
       return undefined;
     }
 
-    //   const searchAPI = await axios(url+name.trim().toLowerCase());
-    //   console.log('searchAPI', searchAPI)
-
-    //   if(searchAPI.data ){
-
-    //     return POKEMON_OBJECT(searchAPI)
-    //   }else{
-    //     const searchDB = await Pokemon.findOne(
-    //       {
-    //       where: {
-    //         name: {
-    //           [Op.like]: name.trim().toLowerCase(),
-    //         },
-    //       },
-    //       },
-    //      { include : [{ model : Type, atributes : ['name'] } ] }
-    //   );
-    //   console.log('searchDB', searchDB.dataValues?.name)
-    //   console.log('searchDB', searchDB.dataValues)
-    //   if(searchDB.dataValues?.name){
-    //     return {
-    //       id: searchDB.dataValues.id,
-
-    //       name: searchDB.dataValues.name,
-    //       height: searchDB.dataValues.height,
-    //       weight: searchDB.dataValues.weight,
-    //       hp: searchDB.dataValues.hp,
-    //       defense: searchDB.dataValues.defense,
-    //       attack: searchDB.dataValues.attack,
-    //       speed: searchDB.dataValues.speed,
-    //       types: searchDB.dataValues.types?.map((type) => type.name),
-    //       image: searchDB.dataValues.image,
-    //     };
-    //   }else {
-    //     return undefined;
-    //   }
-    // }
-    // }
+    
   } catch (error) {
     console.log(error);
   }
@@ -358,8 +318,10 @@ const deletePokemon = async (req, res, next) => {
     if (toDelete) {
       await toDelete.destroy();
       res.status(200).json({ message: "Pokemon deleted" });
+      console.log("Pokemon deleted");
     } else {
       res.status(404).json({ message: "Pokemon not found" });
+      console.log("Pokemon deleted");
     }
   } catch (error) {
     next(error);

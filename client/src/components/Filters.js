@@ -9,6 +9,7 @@ import {
   getPokeTypes,
   filterOrigin,
   
+  
 } from "../actions/index";
 
 import { Pokemon } from "./Pokemon";
@@ -60,6 +61,7 @@ export const Filters = () => {
     e.preventDefault();
     setOrder(e.target.value);
     dispatch(sortBy(e.target.value));
+    setPage(1);
   };
 
   const handleFilterType = (e) => {
@@ -88,7 +90,7 @@ export const Filters = () => {
         </select>
 
         <select className={styles.aside} onChange={handleFilterType}>
-          <option defaultValue="all">Filter by type</option>
+          <option defaultValue="all" >Filter by type</option>
           {poketypes?.map((type) => {
             return (
               <option

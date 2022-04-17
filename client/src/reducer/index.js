@@ -12,8 +12,10 @@ import {
   POST_POKEMON,
   DATA_CONSOLIDATED,
   FILTER_ORIGIN,
-  // ERROR_STATUS,
-  EMPTY_STATE,
+  CLEAN,
+ 
+  // DELETE_POKEMON,
+  //ERROR_STATUS,
 
 } from "../actions/index.js";
 
@@ -33,11 +35,9 @@ const initialState = {
 export function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_ALL_DATA:
-
       return {
         ...state,
         allPokemons: action.payload,
-        selectedPokemon: action.payload,
       };
 
     case SET_PAGE: {
@@ -57,6 +57,13 @@ export function reducer(state = initialState, action) {
         ...state,
         selectedPokemon: action.payload,
       };
+    }
+
+    case CLEAN : {
+      return{
+        ...state,
+        selectedPokemon: []
+      }
     }
 
     case SET_ORIGIN: {
@@ -110,14 +117,14 @@ export function reducer(state = initialState, action) {
       const backUp = state.backData;
       const all = backUp;
       const filtered =
-        action.payload === ""
+        action.payload === ''
           ? all
           : all.filter((pokemon) =>
               pokemon.types?.includes(
                 action.payload.charAt(0).toUpperCase() + action.payload.slice(1)
               )
             );
-
+      
       return {
         ...state,
         dataConsolidated: filtered,
@@ -133,18 +140,15 @@ export function reducer(state = initialState, action) {
         ...state,
         dataConsolidated: byOrigin,
       };
-    }
+    }    
 
     case POST_POKEMON:
       return {
         ...state,    
         newPokemon: action.payload,      
       };
-    case EMPTY_STATE: 
-    return{
-      ...state,
-      newPokemon: action.payload,
-    }
+
+     
       // case ERROR_STATUS: 
       // console.log("ERROR_STATUS en el reducer", action.payload);
       // return {

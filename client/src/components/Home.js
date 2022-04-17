@@ -37,10 +37,16 @@ export function Home() {
     } else if (data === "front") {
       dispatch(allData());
     }
+  }, [data]);
+
+  useEffect(() => {
+      dispatch(getAllData(page, name, origin));
+
   }, [dispatch, page, origin, name]);
 
+
   const switchPage = (page) => {
-    dispatch(getAllData(page, name, origin));
+    // dispatch(getAllData(page, name, origin));
     dispatch(setPage(page));
   };
 

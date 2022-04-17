@@ -3,16 +3,15 @@ import { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getPokeTypes, postPokemon, emptyState } from "../actions";
+import { getPokeTypes, postPokemon } from "../actions";
 // import { validate } from "./validations";
 import styles from "./CreatePokemon.module.css";
 
 export function CreatePokemon() {
-  const image =
-    "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aGihiAJdXHQUE3L2c6O9IgHaHa%26pid%3DApi&f=1";
+  const image = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aGihiAJdXHQUE3L2c6O9IgHaHa%26pid%3DApi&f=1';
 
   const dispatch = useDispatch();
-  const goBack = useHistory();
+  const seeAll = useHistory();
 
   useEffect(() => {
     dispatch(getPokeTypes());
@@ -104,8 +103,8 @@ export function CreatePokemon() {
   const [errors, setErrors] = React.useState({});
   const [isValid, setIsValid] = React.useState(false);
 
-  const goBackToHome = () => {
-    goBack.goBack();
+  const allAtHome = () => {
+    seeAll.push('/home');
   };
 
   useEffect(() => {
@@ -149,26 +148,15 @@ export function CreatePokemon() {
     e.preventDefault();
    if (pokemon.image === "") {pokemon.image = image;}
     dispatch(postPokemon(pokemon));
-    dispatch(emptyState());
 
-
-    // if (newPokemon.message) {
-    //   alert("Pokemon already exist");
-    //   setIsValid(false);
-    //   dispatch(emptyState());
-    //   console.log(newPokemon, "newPokemon tra emptystate");
-    //   console.log(emptyState, 'estado vacio')
-    //   console.log(newPokemon, "newPokemon en handleSubmit");
-    //   return null;
-    // }
     alert(`${pokemon.name.toUpperCase()} has been created!, Check it in Home :)`);
 
-    goBackToHome();
+    allAtHome();
   };
 
   return (
     <>
-      <button className={styles.btn} onClick={goBackToHome}>
+      <button className={styles.btn} onClick={allAtHome}>
         🔙
       </button>
 
@@ -181,6 +169,7 @@ export function CreatePokemon() {
           <label>Name </label>
 
           <input
+          autoComplete="off"
             className={styles.input}
             id="nameField"
             type="text"
@@ -207,7 +196,7 @@ export function CreatePokemon() {
               onChange={handleChange}
               value={pokemon.attack}
             />
-            {errors.attack ? <p className={styles.error}>{errors.hp}</p> : null}
+            {errors.attack ? <p className={styles.error}>{errors.attack}</p> : null}
             <input
               type="number"
               name="defense"

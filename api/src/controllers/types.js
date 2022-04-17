@@ -27,30 +27,5 @@ const getPoketypes = async (req, res, next) => {
   }
 };
 
-//       const typesDB= await Type.findAll();
-//       res.status(200).json(typesDB);
-//     } catch (error) {
-//       next(error);
-//     }
-//   };
 
-//     const pokeTypes = await Type.findAll()
-//     res.status(200).json(pokeTypes)
-
-// }
-// pokeTypes.forEach((type) => {
-//        Type.findOrCreate({
-//           where: {
-//             name: type.name,
-//           },
-//         });
-//       });
-//       const allType = await Type.findAll();
-//       res.status(200).json(allType);
-//     }
-//     catch (error){
-//         next(error);
-//     }
-// }
-
-module.exports = getPoketypes;
+module.exports =getPoketypes;
