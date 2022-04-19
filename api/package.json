@@ -3,12 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "proxy": {
-    "/api/*": {
-      "target": "http://localhost:3001",
-      "secure": false
-    }
-  },
+
   "scripts": {
   
     "dev": "react-scripts start",
