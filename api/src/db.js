@@ -29,7 +29,7 @@ let sequelize =
       })
     : new Sequelize(
         `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pokemon`,
-        { logging: false, native: false }
+        { logging: true, native: false }
       );
 // const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/development`, {
 //   logging: false, // set to console.log to see the raw SQL queries
