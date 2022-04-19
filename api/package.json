@@ -3,15 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-
+  "proxy": {
+    "/api/*": {
+      "target": "http://localhost:3001",
+      "secure": false
+    }
+  },
   "scripts": {
-  
-    "dev": "react-scripts start",
-"start": "serve -s build",
-"build": "react-scripts build",
-"test": "react-scripts test --env=jsdom",
-"eject": "react-scripts eject",
-"heroku-postbuild": "npm run build"
+    "start": "nodemon -L",
+    "test": "mocha -w ./tests/**/*.spec.js"
+    
   },
   "author": "Henry",
   "license": "ISC",
