@@ -1,20 +1,25 @@
 .bkg {
-    margin: 0;
-    padding: 0;
-    background-image: url('../assets/bkg.jpg');
+
+    background-image: url('../assets/bkg2.jpg');
     background-size: cover;
-    background-position: center;
+    position: center; 
     background-repeat: no-repeat;
-    width: 100%;
-    height: 100vh;
-    
-  
-    background-color: blue;
+    height: 70vh;
+    width: 80vw;
+    margin: 5vh auto; 
+    background-color: rgb(19, 216, 255);
+    border-radius: 20px;
+    box-shadow: 0px 0px 20px #78e0f3;
 }
+
+
+
 .go{
-    position: relative;
-    top:50vh;
-    margin-left: 7vw;
+    position: absolute;
+    top:78vh;
+    left: 50vw;
+    font-size: 50px;
+    /* margin-left: 7vw; */
     align-items: center;
     transform: translate(-50%, -50%);
     color: rgb(255, 19, 19);
@@ -23,8 +28,8 @@
     font-weight: bold;
     transition: all 0.3s ease-in-out;
     border: 7px solid black;
-    width: 7.1rem;
-    height: 7.1rem;
+    width: 7em;
+    height: 7em;
     border-radius: 50%;
     background :rgb(224, 214, 214);
     overflow: hidden;
