@@ -17,20 +17,19 @@
 .go{
     position: absolute;
     top:78vh;
-    left: 40vw;
-    margin-left: 7vw; 
+    left: 45vw;
+    /* margin-left: 7vw;  */
     align-items: center;
     transform: translate(-50%, -50%);
-    color: rgb(255, 26, 26);
+    color: rgb(200, 26, 26);
     font-family: 'Luckiest Guy';
-    font-size: 6em;
+    font-size: 2em;
     font-weight: bold;
     transition: all 0.3s ease-in-out;
     border: black solid 1px;
     border-left: rgb(200, 26, 26) solid 1em;
-
-    width: 3em;
-    height: 3em;
+    width: 2.5em;
+    height: 2.5em;
     border-radius: 50%;
     background :rgb(224, 214, 214);
     overflow: hidden;
@@ -50,10 +49,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    
+    /* width: 100%;
+    height: 100%; */
+    background: transparent;    
     transform: scale(1.1);
     transition: all 0.3s ease-in-out;
         
@@ -61,20 +59,13 @@
 
 .go:hover::before{
     content: url('../assets/button.png');
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
+    top: -5vh;
+    left: -7vw;
+
     background: rgb(200, 26, 26);
     transform: scale(1.1);
     transition: all 0.3s ease-in-out;
-    
 
-
-    /* top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    
-     */
 }
 
