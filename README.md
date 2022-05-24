@@ -172,18 +172,17 @@ __IMPORTANTE__: No está permitido utilizar los filtrados, ordenamientos y pagin
 ## :pushpin: Previews :pushpin:
 <div >
 <p align="left">
-  <img height="150" src="./pokemon.png" />
+  <img height="150" src="./assets/Captura1.JPG" />
 
   
-  <img height="150" src="./pokemon.png" />
+  <img height="150" src="./assets/Captura2.JPG" />
 
  
-  <img height="150" src="./pokemon.png" />
+  <img height="150" src="./assets/Captura3.JPG" />
 
 
-  <img height="150" src="./pokemon.png" />
+  <img height="150" src="./assets/Captura4.JPG" />
 
 
-  <img height="150" src="./pokemon.png" />
 </p>
     </div>
