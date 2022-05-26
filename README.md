@@ -167,3 +167,22 @@ __IMPORTANTE__: No está permitido utilizar los filtrados, ordenamientos y pagin
 - [ ] Al menos tener un componente del frontend con sus tests respectivos
 - [ ] Al menos tener una ruta del backend con sus tests respectivos
 - [ ] Al menos tener un modelo de la base de datos con sus tests respectivos
+
+
+## :pushpin: Previews :pushpin:
+<div >
+<p align="left">
+  <img height="150" src="./assets/Captura1.JPG" />
+
+  
+  <img height="150" src="./assets/Captura2.JPG" />
+
+ 
+  <img height="150" src="./assets/Captura3.JPG" />
+
+
+  <img height="150" src="./assets/Captura4.JPG" />
+
+
+</p>
+    </div>
