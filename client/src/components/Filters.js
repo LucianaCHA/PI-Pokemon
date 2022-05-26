@@ -127,7 +127,7 @@ export const Filters = () => {
       </div>
 
       <div className={styles.pagination}>
-        <button className={styles.btn}          disabled={page - 1 === 0}
+        <button className={styles.btn} disabled={page - 1 === 0}
           onClick={(e) => switchPage(page - 1)}
           hidden={page === 1 && isNaN(allPokemons?.results / 12)}
         >

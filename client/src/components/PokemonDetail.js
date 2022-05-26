@@ -10,6 +10,7 @@ import { getById, clean} from "../actions/index.js";
 import errorIMG from "../assets/E404.png";
 import errorUUID from "../assets/E400ID.png";
 import styles from "./PokemonDetail.module.css";
+import ash from "./ash-now.gif";
 
 export function PokemonDetail(props) {
   const id = props.match.params.id;
@@ -41,7 +42,8 @@ export function PokemonDetail(props) {
     <ErrorPage error={<img src={errorIMG} alt="Not found" />} />
   ) : selectedPokemon === "Invalid ID" ? (
     <ErrorPage error={<img src={errorUUID} alt="Invalid Id" />} />
-  ) : (
+  ) : selectedPokemon.length <= 0 ? (
+    <img className={styles.loading} src={ash} alt="loading..." />) : (
     <>
       <button className={styles.btn} onClick={goToBack}>
         🔙

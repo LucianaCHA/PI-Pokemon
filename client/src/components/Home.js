@@ -41,6 +41,7 @@ export function Home() {
 
   useEffect(() => {
       dispatch(getAllData(page, name, origin));
+      window.scroll(0, 0)
 
   }, [dispatch, page, origin, name]);
 
@@ -48,6 +49,8 @@ export function Home() {
   const switchPage = (page) => {
     // dispatch(getAllData(page, name, origin));
     dispatch(setPage(page));
+    
+    
   };
 
   //clean state
@@ -71,6 +74,7 @@ export function Home() {
     // dispatch(setPage(1));
     // dispatch(setOrigin(e.target.value));
     dispatch(getAllData(1, '', e.target.value));
+    
   };
 
   // const handleSort = (e) => {
