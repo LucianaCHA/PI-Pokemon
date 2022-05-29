@@ -15,9 +15,10 @@ import "./index.css";
 function App() {
   return (
     <div className='App'>
-      <Route exact path="/new" component={CreatePokemon}/>
+      
       <Route path="/home" component={NavBar}/>
       <Route exact path="/" component={LandingPage}/>
+      <Route exact path="/new" component={CreatePokemon}/>
       <Route path="/home/:id" component={PokemonDetail}/>
 
       <Route exact path="/home" component={Home} />
